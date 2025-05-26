@@ -1,0 +1,26 @@
+{
+  "name": "whackrock-subgraphs-v3",
+  "version": "1.0.0",
+  "description": "WhackRock Funds Subgraph",
+  "main": "index.js",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ whackrock-subgraphs-v3",
+    "create-local": "graph create --node http://localhost:8020/ whackrock-subgraphs-v3",
+    "remove-local": "graph remove --node http://localhost:8020/ whackrock-subgraphs-v3",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 whackrock-subgraphs-v3"
+  },
+  "keywords": [
+    "subgraph",
+    "defi",
+    "whackrock",
+    "fund"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.97.1",
+    "@graphprotocol/graph-ts": "^0.38.1"
+  }
+}

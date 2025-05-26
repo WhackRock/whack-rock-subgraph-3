@@ -1,0 +1,70 @@
+specVersion: 0.0.8
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: WhackRockFundRegistry
+    network: base
+    source:
+      address: "0x2b9e3ddfa63e3e93b931fcad8fa98307225dfb0f" # Replace with actual registry address
+      abi: WhackRockFundRegistry
+      startBlock: 30730184 # Replace with actual deployment block
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Registry
+        - Fund
+        - AllowedToken
+        - FundToken
+        - FundNAVSnapshot
+        - GlobalStats
+      abis:
+        - name: WhackRockFundRegistry
+          file: ./abis/WhackRockFundRegistry.json
+        - name: WhackRockFund
+          file: ./abis/WhackRockFund.json
+      eventHandlers:
+        - event: WhackRockFundCreated(indexed uint256,indexed address,indexed address,address,string,string,address[],uint256[],address,uint256,uint256)
+          handler: handleWhackRockFundCreated
+        - event: RegistryAllowedTokenAdded(indexed address)
+          handler: handleRegistryAllowedTokenAdded
+        - event: RegistryAllowedTokenRemoved(indexed address)
+          handler: handleRegistryAllowedTokenRemoved
+      blockHandlers:
+        - handler: handleHourlyNAVUpdate
+          filter:
+            kind: polling
+            every: 300 # Every 300 blocks (~1 hour on Base, assuming 2 second blocks)
+      file: ./src/registry.ts
+templates:
+  - kind: ethereum/contract
+    name: WhackRockFund
+    network: base
+    source:
+      abi: WhackRockFund
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Fund
+        - FundToken
+        - FundNAVSnapshot
+        - Agent
+      abis:
+        - name: WhackRockFund
+          file: ./abis/WhackRockFund.json
+      eventHandlers:
+        - event: AgentUpdated(indexed address,indexed address)
+          handler: handleAgentUpdated
+        - event: TargetWeightsUpdated(indexed address,address[],uint256[],uint256)
+          handler: handleTargetWeightsUpdated
+        - event: WETHDepositedAndSharesMinted(indexed address,indexed address,uint256,uint256,uint256,uint256)
+          handler: handleWETHDepositedAndSharesMinted
+        - event: BasketAssetsWithdrawn(indexed address,indexed address,uint256,address[],uint256[],uint256,uint256,uint256)
+          handler: handleBasketAssetsWithdrawn
+        - event: AgentAumFeeCollected(indexed address,uint256,indexed address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleAgentAumFeeCollected
+      file: ./src/fund.ts 
