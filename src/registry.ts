@@ -45,6 +45,7 @@ export function handleWhackRockFundCreated(event: WhackRockFundCreated): void {
   fund.agentAumFeeBps = event.params.agentTotalAumFeeBps;
   fund.currentNAVInUSDC = BigInt.fromI32(0);
   fund.lastNAVUpdate = event.block.timestamp;
+  fund.lastWethValueInUSDC = BigInt.fromI32(0);
   fund.totalSupply = BigInt.fromI32(0);
   fund.createdAt = event.params.timestamp;
   fund.createdAtBlock = event.block.number;
