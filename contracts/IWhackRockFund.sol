@@ -65,11 +65,13 @@ interface IWhackRockFund {
      * @param navBeforeRebalanceAA NAV in accounting asset before rebalancing
      * @param navAfterRebalanceAA NAV in accounting asset after rebalancing
      * @param blockTimestamp Block timestamp when rebalance was executed
+     * @param wethValueInUSDC Value of the WETH in USDC units
      */
     event RebalanceCycleExecuted(
         uint256 navBeforeRebalanceAA,
         uint256 navAfterRebalanceAA,
-        uint256 blockTimestamp
+        uint256 blockTimestamp,
+        uint256 wethValueInUSDC
     );
     
     /**
@@ -87,6 +89,13 @@ interface IWhackRockFund {
     );
     
     /**
+     * @notice Emitted during emergency token withdrawals
+     * @param token Address of the token withdrawn
+     * @param amount Amount of token withdrawn
+     */
+    event EmergencyWithdrawal(address indexed token, uint256 amount);
+    
+    /**
      * @notice Emitted when WETH is deposited and shares are minted
      * @param depositor Address that deposited WETH
      * @param receiver Address that received the minted shares
@@ -94,6 +103,7 @@ interface IWhackRockFund {
      * @param sharesMinted Amount of shares minted
      * @param navBeforeDepositWETH NAV in WETH before the deposit
      * @param totalSupplyBeforeDeposit Total supply of shares before the deposit
+     * @param wethValueInUSDC Value of the WETH deposited in USDC units
      */
     event WETHDepositedAndSharesMinted(
         address indexed depositor,
@@ -101,7 +111,8 @@ interface IWhackRockFund {
         uint256 wethDeposited,
         uint256 sharesMinted,
         uint256 navBeforeDepositWETH,
-        uint256 totalSupplyBeforeDeposit
+        uint256 totalSupplyBeforeDeposit,
+        uint256 wethValueInUSDC
     );
     
     /**
@@ -114,6 +125,7 @@ interface IWhackRockFund {
      * @param navBeforeWithdrawalWETH NAV in WETH before the withdrawal
      * @param totalSupplyBeforeWithdrawal Total supply of shares before the withdrawal
      * @param totalWETHValueOfWithdrawal Total value withdrawn in WETH units
+     * @param wethValueInUSDC Value of the WETH withdrawn in USDC units
      */
     event BasketAssetsWithdrawn(
         address indexed owner,
@@ -123,7 +135,8 @@ interface IWhackRockFund {
         uint256[] amountsWithdrawn,
         uint256 navBeforeWithdrawalWETH,
         uint256 totalSupplyBeforeWithdrawal,
-        uint256 totalWETHValueOfWithdrawal
+        uint256 totalWETHValueOfWithdrawal,
+        uint256 wethValueInUSDC
     );
     
     /**
@@ -136,6 +149,7 @@ interface IWhackRockFund {
      * @param navAtFeeCalculation NAV at the time of fee calculation
      * @param totalSharesAtFeeCalculation Total shares at the time of fee calculation
      * @param timestamp Block timestamp when fees were collected
+     * @param wethValueInUSDC Value of 1 WETH in USDC at time of fee collection
      */
     event AgentAumFeeCollected(
         address indexed agentFeeWallet,
@@ -145,7 +159,8 @@ interface IWhackRockFund {
         uint256 totalFeeValueInAccountingAsset,
         uint256 navAtFeeCalculation,
         uint256 totalSharesAtFeeCalculation,
-        uint256 timestamp
+        uint256 timestamp,
+        uint256 wethValueInUSDC
     );
 
     // --- Public State Variable Getters ---
@@ -264,6 +279,12 @@ interface IWhackRockFund {
     // --- Core Functions ---
     
     /**
+     * @notice Calculates the total net asset value of the fund in accounting asset (WETH) units
+     * @return totalManagedAssets Total NAV in WETH
+     */
+    function totalNAVInAccountingAsset() external view returns (uint256 totalManagedAssets);
+    
+    /**
      * @notice Calculates the total net asset value of the fund in USDC units
      * @return totalManagedAssetsInUSDC Total NAV in USDC
      */
@@ -319,4 +340,20 @@ interface IWhackRockFund {
      */
     function triggerRebalance() external;
 
+    /**
+     * @notice Emergency function to withdraw ERC20 tokens
+     * @dev Only callable by owner, used in case of token airdrops or emergencies
+     * @param _tokenAddress Address of the token to withdraw
+     * @param _to Address to receive the withdrawn tokens
+     * @param _amount Amount of tokens to withdraw
+     */
+    function emergencyWithdrawERC20(address _tokenAddress, address _to, uint256 _amount) external;
+
+    /**
+     * @notice Emergency function to withdraw native ETH
+     * @dev Only callable by owner, used in case ETH is accidentally sent to the contract
+     * @param _to Address to receive the withdrawn ETH
+     * @param _amount Amount of ETH to withdraw
+     */
+    function emergencyWithdrawNative(address payable _to, uint256 _amount) external;
 }

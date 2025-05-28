@@ -6,9 +6,9 @@ dataSources:
     name: WhackRockFundRegistry
     network: base
     source:
-      address: "0x2b9e3ddfa63e3e93b931fcad8fa98307225dfb0f" # Replace with actual registry address
+      address: "0x7454bDdfF6B33482F69178649b713EA8f28ab807" # Replace with actual registry address
       abi: WhackRockFundRegistry
-      startBlock: 30730184 # Replace with actual deployment block
+      startBlock: 30820332 # Replace with actual deployment block
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -53,6 +53,11 @@ templates:
         - FundToken
         - FundNAVSnapshot
         - Agent
+        - User
+        - UserFundPosition
+        - Deposit
+        - Withdrawal
+        - RebalanceCycle
       abis:
         - name: WhackRockFund
           file: ./abis/WhackRockFund.json
@@ -61,10 +66,12 @@ templates:
           handler: handleAgentUpdated
         - event: TargetWeightsUpdated(indexed address,address[],uint256[],uint256)
           handler: handleTargetWeightsUpdated
-        - event: WETHDepositedAndSharesMinted(indexed address,indexed address,uint256,uint256,uint256,uint256)
+        - event: WETHDepositedAndSharesMinted(indexed address,indexed address,uint256,uint256,uint256,uint256,uint256)
           handler: handleWETHDepositedAndSharesMinted
-        - event: BasketAssetsWithdrawn(indexed address,indexed address,uint256,address[],uint256[],uint256,uint256,uint256)
+        - event: BasketAssetsWithdrawn(indexed address,indexed address,uint256,address[],uint256[],uint256,uint256,uint256,uint256)
           handler: handleBasketAssetsWithdrawn
-        - event: AgentAumFeeCollected(indexed address,uint256,indexed address,uint256,uint256,uint256,uint256,uint256)
+        - event: AgentAumFeeCollected(indexed address,uint256,indexed address,uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleAgentAumFeeCollected
+        - event: RebalanceCycleExecuted(uint256,uint256,uint256,uint256)
+          handler: handleRebalanceCycleExecuted
       file: ./src/fund.ts 

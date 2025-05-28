@@ -235,6 +235,7 @@ export function handleHourlyNAVUpdate(block: ethereum.Block): void {
       snapshot.blockNumber = block.number;
       snapshot.triggeredBy = "hourly";
       snapshot.transactionHash = ZERO_BYTES;
+      snapshot.wethValueInUSDC = BigInt.fromI32(0); // Default value for hourly updates since we can't get WETH price from block handler
       
       // Calculate NAV per share
       snapshot.navPerShare = calculateNavPerShare(navInUSDC, totalSupply);

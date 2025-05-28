@@ -10,6 +10,56 @@ import {
   BigInt,
 } from "@graphprotocol/graph-ts";
 
+export class AgentAumFeeCollected extends ethereum.Event {
+  get params(): AgentAumFeeCollected__Params {
+    return new AgentAumFeeCollected__Params(this);
+  }
+}
+
+export class AgentAumFeeCollected__Params {
+  _event: AgentAumFeeCollected;
+
+  constructor(event: AgentAumFeeCollected) {
+    this._event = event;
+  }
+
+  get agentFeeWallet(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get agentSharesMinted(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get protocolFeeRecipient(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+
+  get protocolSharesMinted(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
+
+  get totalFeeValueInAccountingAsset(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
+  }
+
+  get navAtFeeCalculation(): BigInt {
+    return this._event.parameters[5].value.toBigInt();
+  }
+
+  get totalSharesAtFeeCalculation(): BigInt {
+    return this._event.parameters[6].value.toBigInt();
+  }
+
+  get timestamp(): BigInt {
+    return this._event.parameters[7].value.toBigInt();
+  }
+
+  get wethValueInUSDC(): BigInt {
+    return this._event.parameters[8].value.toBigInt();
+  }
+}
+
 export class AgentUpdated extends ethereum.Event {
   get params(): AgentUpdated__Params {
     return new AgentUpdated__Params(this);
@@ -32,32 +82,104 @@ export class AgentUpdated__Params {
   }
 }
 
-export class TargetWeightsUpdated extends ethereum.Event {
-  get params(): TargetWeightsUpdated__Params {
-    return new TargetWeightsUpdated__Params(this);
+export class BasketAssetsWithdrawn extends ethereum.Event {
+  get params(): BasketAssetsWithdrawn__Params {
+    return new BasketAssetsWithdrawn__Params(this);
   }
 }
 
-export class TargetWeightsUpdated__Params {
-  _event: TargetWeightsUpdated;
+export class BasketAssetsWithdrawn__Params {
+  _event: BasketAssetsWithdrawn;
 
-  constructor(event: TargetWeightsUpdated) {
+  constructor(event: BasketAssetsWithdrawn) {
     this._event = event;
   }
 
-  get agent(): Address {
+  get owner(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get tokens(): Array<Address> {
-    return this._event.parameters[1].value.toAddressArray();
+  get receiver(): Address {
+    return this._event.parameters[1].value.toAddress();
   }
 
-  get weights(): Array<BigInt> {
-    return this._event.parameters[2].value.toBigIntArray();
+  get sharesBurned(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
   }
 
-  get timestamp(): BigInt {
+  get tokensWithdrawn(): Array<Address> {
+    return this._event.parameters[3].value.toAddressArray();
+  }
+
+  get amountsWithdrawn(): Array<BigInt> {
+    return this._event.parameters[4].value.toBigIntArray();
+  }
+
+  get navBeforeWithdrawalWETH(): BigInt {
+    return this._event.parameters[5].value.toBigInt();
+  }
+
+  get totalSupplyBeforeWithdrawal(): BigInt {
+    return this._event.parameters[6].value.toBigInt();
+  }
+
+  get totalWETHValueOfWithdrawal(): BigInt {
+    return this._event.parameters[7].value.toBigInt();
+  }
+
+  get wethValueInUSDC(): BigInt {
+    return this._event.parameters[8].value.toBigInt();
+  }
+}
+
+export class EmergencyWithdrawal extends ethereum.Event {
+  get params(): EmergencyWithdrawal__Params {
+    return new EmergencyWithdrawal__Params(this);
+  }
+}
+
+export class EmergencyWithdrawal__Params {
+  _event: EmergencyWithdrawal;
+
+  constructor(event: EmergencyWithdrawal) {
+    this._event = event;
+  }
+
+  get token(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
+export class FundTokenSwapped extends ethereum.Event {
+  get params(): FundTokenSwapped__Params {
+    return new FundTokenSwapped__Params(this);
+  }
+}
+
+export class FundTokenSwapped__Params {
+  _event: FundTokenSwapped;
+
+  constructor(event: FundTokenSwapped) {
+    this._event = event;
+  }
+
+  get tokenFrom(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get amountFrom(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get tokenTo(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+
+  get amountTo(): BigInt {
     return this._event.parameters[3].value.toBigInt();
   }
 }
@@ -112,34 +234,38 @@ export class RebalanceCycleExecuted__Params {
   get blockTimestamp(): BigInt {
     return this._event.parameters[2].value.toBigInt();
   }
-}
 
-export class FundTokenSwapped extends ethereum.Event {
-  get params(): FundTokenSwapped__Params {
-    return new FundTokenSwapped__Params(this);
+  get wethValueInUSDC(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
   }
 }
 
-export class FundTokenSwapped__Params {
-  _event: FundTokenSwapped;
+export class TargetWeightsUpdated extends ethereum.Event {
+  get params(): TargetWeightsUpdated__Params {
+    return new TargetWeightsUpdated__Params(this);
+  }
+}
 
-  constructor(event: FundTokenSwapped) {
+export class TargetWeightsUpdated__Params {
+  _event: TargetWeightsUpdated;
+
+  constructor(event: TargetWeightsUpdated) {
     this._event = event;
   }
 
-  get tokenFrom(): Address {
+  get agent(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get amountFrom(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+  get tokens(): Array<Address> {
+    return this._event.parameters[1].value.toAddressArray();
   }
 
-  get tokenTo(): Address {
-    return this._event.parameters[2].value.toAddress();
+  get weights(): Array<BigInt> {
+    return this._event.parameters[2].value.toBigIntArray();
   }
 
-  get amountTo(): BigInt {
+  get timestamp(): BigInt {
     return this._event.parameters[3].value.toBigInt();
   }
 }
@@ -180,118 +306,15 @@ export class WETHDepositedAndSharesMinted__Params {
   get totalSupplyBeforeDeposit(): BigInt {
     return this._event.parameters[5].value.toBigInt();
   }
-}
 
-export class BasketAssetsWithdrawn extends ethereum.Event {
-  get params(): BasketAssetsWithdrawn__Params {
-    return new BasketAssetsWithdrawn__Params(this);
-  }
-}
-
-export class BasketAssetsWithdrawn__Params {
-  _event: BasketAssetsWithdrawn;
-
-  constructor(event: BasketAssetsWithdrawn) {
-    this._event = event;
-  }
-
-  get owner(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get receiver(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get sharesBurned(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-
-  get tokensWithdrawn(): Array<Address> {
-    return this._event.parameters[3].value.toAddressArray();
-  }
-
-  get amountsWithdrawn(): Array<BigInt> {
-    return this._event.parameters[4].value.toBigIntArray();
-  }
-
-  get navBeforeWithdrawalWETH(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-
-  get totalSupplyBeforeWithdrawal(): BigInt {
+  get wethValueInUSDC(): BigInt {
     return this._event.parameters[6].value.toBigInt();
-  }
-
-  get totalWETHValueOfWithdrawal(): BigInt {
-    return this._event.parameters[7].value.toBigInt();
-  }
-}
-
-export class AgentAumFeeCollected extends ethereum.Event {
-  get params(): AgentAumFeeCollected__Params {
-    return new AgentAumFeeCollected__Params(this);
-  }
-}
-
-export class AgentAumFeeCollected__Params {
-  _event: AgentAumFeeCollected;
-
-  constructor(event: AgentAumFeeCollected) {
-    this._event = event;
-  }
-
-  get agentFeeWallet(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get agentSharesMinted(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-
-  get protocolFeeRecipient(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get protocolSharesMinted(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get totalFeeValueInAccountingAsset(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-
-  get navAtFeeCalculation(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-
-  get totalSharesAtFeeCalculation(): BigInt {
-    return this._event.parameters[6].value.toBigInt();
-  }
-
-  get timestamp(): BigInt {
-    return this._event.parameters[7].value.toBigInt();
   }
 }
 
 export class WhackRockFund extends ethereum.SmartContract {
   static bind(address: Address): WhackRockFund {
     return new WhackRockFund("WhackRockFund", address);
-  }
-
-  agent(): Address {
-    let result = super.call("agent", "agent():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_agent(): ethereum.CallResult<Address> {
-    let result = super.tryCall("agent", "agent():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   ACCOUNTING_ASSET(): Address {
@@ -317,6 +340,167 @@ export class WhackRockFund extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  AGENT_AUM_FEE_SHARE_BPS(): BigInt {
+    let result = super.call(
+      "AGENT_AUM_FEE_SHARE_BPS",
+      "AGENT_AUM_FEE_SHARE_BPS():(uint256)",
+      [],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_AGENT_AUM_FEE_SHARE_BPS(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "AGENT_AUM_FEE_SHARE_BPS",
+      "AGENT_AUM_FEE_SHARE_BPS():(uint256)",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  DEFAULT_POOL_STABILITY(): boolean {
+    let result = super.call(
+      "DEFAULT_POOL_STABILITY",
+      "DEFAULT_POOL_STABILITY():(bool)",
+      [],
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_DEFAULT_POOL_STABILITY(): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "DEFAULT_POOL_STABILITY",
+      "DEFAULT_POOL_STABILITY():(bool)",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  DEFAULT_SLIPPAGE_BPS(): BigInt {
+    let result = super.call(
+      "DEFAULT_SLIPPAGE_BPS",
+      "DEFAULT_SLIPPAGE_BPS():(uint256)",
+      [],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_DEFAULT_SLIPPAGE_BPS(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "DEFAULT_SLIPPAGE_BPS",
+      "DEFAULT_SLIPPAGE_BPS():(uint256)",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  PROTOCOL_AUM_FEE_SHARE_BPS(): BigInt {
+    let result = super.call(
+      "PROTOCOL_AUM_FEE_SHARE_BPS",
+      "PROTOCOL_AUM_FEE_SHARE_BPS():(uint256)",
+      [],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_PROTOCOL_AUM_FEE_SHARE_BPS(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "PROTOCOL_AUM_FEE_SHARE_BPS",
+      "PROTOCOL_AUM_FEE_SHARE_BPS():(uint256)",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  REBALANCE_DEVIATION_THRESHOLD_BPS(): BigInt {
+    let result = super.call(
+      "REBALANCE_DEVIATION_THRESHOLD_BPS",
+      "REBALANCE_DEVIATION_THRESHOLD_BPS():(uint256)",
+      [],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_REBALANCE_DEVIATION_THRESHOLD_BPS(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "REBALANCE_DEVIATION_THRESHOLD_BPS",
+      "REBALANCE_DEVIATION_THRESHOLD_BPS():(uint256)",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  SWAP_DEADLINE_OFFSET(): BigInt {
+    let result = super.call(
+      "SWAP_DEADLINE_OFFSET",
+      "SWAP_DEADLINE_OFFSET():(uint256)",
+      [],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_SWAP_DEADLINE_OFFSET(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "SWAP_DEADLINE_OFFSET",
+      "SWAP_DEADLINE_OFFSET():(uint256)",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  TOTAL_WEIGHT_BASIS_POINTS(): BigInt {
+    let result = super.call(
+      "TOTAL_WEIGHT_BASIS_POINTS",
+      "TOTAL_WEIGHT_BASIS_POINTS():(uint256)",
+      [],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_TOTAL_WEIGHT_BASIS_POINTS(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "TOTAL_WEIGHT_BASIS_POINTS",
+      "TOTAL_WEIGHT_BASIS_POINTS():(uint256)",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   USDC_ADDRESS(): Address {
     let result = super.call("USDC_ADDRESS", "USDC_ADDRESS():(address)", []);
 
@@ -325,6 +509,63 @@ export class WhackRockFund extends ethereum.SmartContract {
 
   try_USDC_ADDRESS(): ethereum.CallResult<Address> {
     let result = super.tryCall("USDC_ADDRESS", "USDC_ADDRESS():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  agent(): Address {
+    let result = super.call("agent", "agent():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_agent(): ethereum.CallResult<Address> {
+    let result = super.tryCall("agent", "agent():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  agentAumFeeBps(): BigInt {
+    let result = super.call("agentAumFeeBps", "agentAumFeeBps():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_agentAumFeeBps(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "agentAumFeeBps",
+      "agentAumFeeBps():(uint256)",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  agentAumFeeWallet(): Address {
+    let result = super.call(
+      "agentAumFeeWallet",
+      "agentAumFeeWallet():(address)",
+      [],
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_agentAumFeeWallet(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "agentAumFeeWallet",
+      "agentAumFeeWallet():(address)",
+      [],
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -355,27 +596,47 @@ export class WhackRockFund extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  targetWeights(token: Address): BigInt {
-    let result = super.call(
-      "targetWeights",
-      "targetWeights(address):(uint256)",
-      [ethereum.Value.fromAddress(token)],
-    );
+  deposit(amountWETHToDeposit: BigInt, receiver: Address): BigInt {
+    let result = super.call("deposit", "deposit(uint256,address):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(amountWETHToDeposit),
+      ethereum.Value.fromAddress(receiver),
+    ]);
 
     return result[0].toBigInt();
   }
 
-  try_targetWeights(token: Address): ethereum.CallResult<BigInt> {
+  try_deposit(
+    amountWETHToDeposit: BigInt,
+    receiver: Address,
+  ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "targetWeights",
-      "targetWeights(address):(uint256)",
-      [ethereum.Value.fromAddress(token)],
+      "deposit",
+      "deposit(uint256,address):(uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(amountWETHToDeposit),
+        ethereum.Value.fromAddress(receiver),
+      ],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  dexRouter(): Address {
+    let result = super.call("dexRouter", "dexRouter():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_dexRouter(): ethereum.CallResult<Address> {
+    let result = super.tryCall("dexRouter", "dexRouter():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   isAllowedTokenInternal(token: Address): boolean {
@@ -401,39 +662,20 @@ export class WhackRockFund extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  agentAumFeeWallet(): Address {
+  lastAgentAumFeeCollectionTimestamp(): BigInt {
     let result = super.call(
-      "agentAumFeeWallet",
-      "agentAumFeeWallet():(address)",
+      "lastAgentAumFeeCollectionTimestamp",
+      "lastAgentAumFeeCollectionTimestamp():(uint256)",
       [],
     );
-
-    return result[0].toAddress();
-  }
-
-  try_agentAumFeeWallet(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "agentAumFeeWallet",
-      "agentAumFeeWallet():(address)",
-      [],
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  agentAumFeeBps(): BigInt {
-    let result = super.call("agentAumFeeBps", "agentAumFeeBps():(uint256)", []);
 
     return result[0].toBigInt();
   }
 
-  try_agentAumFeeBps(): ethereum.CallResult<BigInt> {
+  try_lastAgentAumFeeCollectionTimestamp(): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "agentAumFeeBps",
-      "agentAumFeeBps():(uint256)",
+      "lastAgentAumFeeCollectionTimestamp",
+      "lastAgentAumFeeCollectionTimestamp():(uint256)",
       [],
     );
     if (result.reverted) {
@@ -466,20 +708,43 @@ export class WhackRockFund extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  lastAgentAumFeeCollectionTimestamp(): BigInt {
+  targetWeights(token: Address): BigInt {
     let result = super.call(
-      "lastAgentAumFeeCollectionTimestamp",
-      "lastAgentAumFeeCollectionTimestamp():(uint256)",
+      "targetWeights",
+      "targetWeights(address):(uint256)",
+      [ethereum.Value.fromAddress(token)],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_targetWeights(token: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "targetWeights",
+      "targetWeights(address):(uint256)",
+      [ethereum.Value.fromAddress(token)],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  totalNAVInAccountingAsset(): BigInt {
+    let result = super.call(
+      "totalNAVInAccountingAsset",
+      "totalNAVInAccountingAsset():(uint256)",
       [],
     );
 
     return result[0].toBigInt();
   }
 
-  try_lastAgentAumFeeCollectionTimestamp(): ethereum.CallResult<BigInt> {
+  try_totalNAVInAccountingAsset(): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "lastAgentAumFeeCollectionTimestamp",
-      "lastAgentAumFeeCollectionTimestamp():(uint256)",
+      "totalNAVInAccountingAsset",
+      "totalNAVInAccountingAsset():(uint256)",
       [],
     );
     if (result.reverted) {
@@ -508,64 +773,6 @@ export class WhackRockFund extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  deposit(amountWETHToDeposit: BigInt, receiver: Address): BigInt {
-    let result = super.call("deposit", "deposit(uint256,address):(uint256)", [
-      ethereum.Value.fromUnsignedBigInt(amountWETHToDeposit),
-      ethereum.Value.fromAddress(receiver),
-    ]);
-
-    return result[0].toBigInt();
-  }
-
-  try_deposit(
-    amountWETHToDeposit: BigInt,
-    receiver: Address,
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "deposit",
-      "deposit(uint256,address):(uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(amountWETHToDeposit),
-        ethereum.Value.fromAddress(receiver),
-      ],
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  name(): string {
-    let result = super.call("name", "name():(string)", []);
-
-    return result[0].toString();
-  }
-
-  try_name(): ethereum.CallResult<string> {
-    let result = super.tryCall("name", "name():(string)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toString());
-  }
-
-  symbol(): string {
-    let result = super.call("symbol", "symbol():(string)", []);
-
-    return result[0].toString();
-  }
-
-  try_symbol(): ethereum.CallResult<string> {
-    let result = super.tryCall("symbol", "symbol():(string)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toString());
-  }
-
   totalSupply(): BigInt {
     let result = super.call("totalSupply", "totalSupply():(uint256)", []);
 
@@ -579,6 +786,32 @@ export class WhackRockFund extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+}
+
+export class CollectAgentManagementFeeCall extends ethereum.Call {
+  get inputs(): CollectAgentManagementFeeCall__Inputs {
+    return new CollectAgentManagementFeeCall__Inputs(this);
+  }
+
+  get outputs(): CollectAgentManagementFeeCall__Outputs {
+    return new CollectAgentManagementFeeCall__Outputs(this);
+  }
+}
+
+export class CollectAgentManagementFeeCall__Inputs {
+  _call: CollectAgentManagementFeeCall;
+
+  constructor(call: CollectAgentManagementFeeCall) {
+    this._call = call;
+  }
+}
+
+export class CollectAgentManagementFeeCall__Outputs {
+  _call: CollectAgentManagementFeeCall;
+
+  constructor(call: CollectAgentManagementFeeCall) {
+    this._call = call;
   }
 }
 
@@ -620,66 +853,74 @@ export class DepositCall__Outputs {
   }
 }
 
-export class WithdrawCall extends ethereum.Call {
-  get inputs(): WithdrawCall__Inputs {
-    return new WithdrawCall__Inputs(this);
+export class EmergencyWithdrawERC20Call extends ethereum.Call {
+  get inputs(): EmergencyWithdrawERC20Call__Inputs {
+    return new EmergencyWithdrawERC20Call__Inputs(this);
   }
 
-  get outputs(): WithdrawCall__Outputs {
-    return new WithdrawCall__Outputs(this);
+  get outputs(): EmergencyWithdrawERC20Call__Outputs {
+    return new EmergencyWithdrawERC20Call__Outputs(this);
   }
 }
 
-export class WithdrawCall__Inputs {
-  _call: WithdrawCall;
+export class EmergencyWithdrawERC20Call__Inputs {
+  _call: EmergencyWithdrawERC20Call;
 
-  constructor(call: WithdrawCall) {
+  constructor(call: EmergencyWithdrawERC20Call) {
     this._call = call;
   }
 
-  get sharesToBurn(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
+  get _tokenAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
   }
 
-  get receiver(): Address {
+  get _to(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get owner(): Address {
-    return this._call.inputValues[2].value.toAddress();
+  get _amount(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
   }
 }
 
-export class WithdrawCall__Outputs {
-  _call: WithdrawCall;
+export class EmergencyWithdrawERC20Call__Outputs {
+  _call: EmergencyWithdrawERC20Call;
 
-  constructor(call: WithdrawCall) {
+  constructor(call: EmergencyWithdrawERC20Call) {
     this._call = call;
   }
 }
 
-export class CollectAgentManagementFeeCall extends ethereum.Call {
-  get inputs(): CollectAgentManagementFeeCall__Inputs {
-    return new CollectAgentManagementFeeCall__Inputs(this);
+export class EmergencyWithdrawNativeCall extends ethereum.Call {
+  get inputs(): EmergencyWithdrawNativeCall__Inputs {
+    return new EmergencyWithdrawNativeCall__Inputs(this);
   }
 
-  get outputs(): CollectAgentManagementFeeCall__Outputs {
-    return new CollectAgentManagementFeeCall__Outputs(this);
+  get outputs(): EmergencyWithdrawNativeCall__Outputs {
+    return new EmergencyWithdrawNativeCall__Outputs(this);
   }
 }
 
-export class CollectAgentManagementFeeCall__Inputs {
-  _call: CollectAgentManagementFeeCall;
+export class EmergencyWithdrawNativeCall__Inputs {
+  _call: EmergencyWithdrawNativeCall;
 
-  constructor(call: CollectAgentManagementFeeCall) {
+  constructor(call: EmergencyWithdrawNativeCall) {
     this._call = call;
   }
+
+  get _to(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _amount(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
 }
 
-export class CollectAgentManagementFeeCall__Outputs {
-  _call: CollectAgentManagementFeeCall;
+export class EmergencyWithdrawNativeCall__Outputs {
+  _call: EmergencyWithdrawNativeCall;
 
-  constructor(call: CollectAgentManagementFeeCall) {
+  constructor(call: EmergencyWithdrawNativeCall) {
     this._call = call;
   }
 }
@@ -766,6 +1007,44 @@ export class TriggerRebalanceCall__Outputs {
   _call: TriggerRebalanceCall;
 
   constructor(call: TriggerRebalanceCall) {
+    this._call = call;
+  }
+}
+
+export class WithdrawCall extends ethereum.Call {
+  get inputs(): WithdrawCall__Inputs {
+    return new WithdrawCall__Inputs(this);
+  }
+
+  get outputs(): WithdrawCall__Outputs {
+    return new WithdrawCall__Outputs(this);
+  }
+}
+
+export class WithdrawCall__Inputs {
+  _call: WithdrawCall;
+
+  constructor(call: WithdrawCall) {
+    this._call = call;
+  }
+
+  get sharesToBurn(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get receiver(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get owner(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+}
+
+export class WithdrawCall__Outputs {
+  _call: WithdrawCall;
+
+  constructor(call: WithdrawCall) {
     this._call = call;
   }
 }

@@ -5,6 +5,7 @@ import {
   WETHDepositedAndSharesMinted,
   BasketAssetsWithdrawn,
   AgentAumFeeCollected,
+  RebalanceCycleExecuted,
   WhackRockFund as FundContract
 } from "../generated/templates/WhackRockFund/WhackRockFund";
 import {
@@ -12,7 +13,12 @@ import {
   FundToken,
   FundNAVSnapshot,
   Agent,
-  GlobalStats
+  GlobalStats,
+  User,
+  UserFundPosition,
+  Deposit,
+  Withdrawal,
+  RebalanceCycle
 } from "../generated/schema";
 import { roundToHour, calculateNavPerShare } from "./helpers";
 
@@ -24,7 +30,8 @@ function createOrUpdateNAVSnapshot(
   blockNumber: BigInt,
   timestamp: BigInt,
   triggeredBy: string,
-  transactionHash: Bytes
+  transactionHash: Bytes,
+  wethValueInUSDC: BigInt
 ): void {
   let fund = Fund.load(fundAddress.toHexString());
   if (fund == null) return;
@@ -65,6 +72,7 @@ function createOrUpdateNAVSnapshot(
   snapshot.blockNumber = blockNumber;
   snapshot.triggeredBy = triggeredBy;
   snapshot.transactionHash = transactionHash;
+  snapshot.wethValueInUSDC = wethValueInUSDC;
 
   // Calculate NAV per share
   snapshot.navPerShare = calculateNavPerShare(navInUSDC, totalSupply);
@@ -91,6 +99,65 @@ function updateGlobalTVL(): void {
   // For now, we'll update this when we have individual fund updates
   globalStats.lastUpdated = BigInt.fromI32(0); // Will be set by caller
   globalStats.save();
+}
+
+/**
+ * Helper function to get or create a User entity
+ */
+function getOrCreateUser(userAddress: Address, timestamp: BigInt): User {
+  let userId = userAddress.toHexString();
+  let user = User.load(userId);
+  
+  if (user == null) {
+    user = new User(userId);
+    user.address = userAddress;
+    user.totalDepositedUSDC = BigInt.fromI32(0);
+    user.totalWithdrawnUSDC = BigInt.fromI32(0);
+    user.firstActivityAt = timestamp;
+    user.lastActivityAt = timestamp;
+    user.save();
+  }
+  
+  return user;
+}
+
+/**
+ * Helper function to get or create a UserFundPosition entity
+ */
+function getOrCreateUserFundPosition(userAddress: Address, fundAddress: Address, timestamp: BigInt): UserFundPosition {
+  let positionId = userAddress.toHexString() + "-" + fundAddress.toHexString();
+  let position = UserFundPosition.load(positionId);
+  
+  if (position == null) {
+    position = new UserFundPosition(positionId);
+    position.user = userAddress.toHexString();
+    position.fund = fundAddress.toHexString();
+    position.shareBalance = BigInt.fromI32(0);
+    position.totalDepositedWETH = BigInt.fromI32(0);
+    position.totalDepositedUSDC = BigInt.fromI32(0);
+    position.totalWETHValueOfSharesWithdrawn = BigInt.fromI32(0);
+    position.totalUSDCValueOfSharesWithdrawn = BigInt.fromI32(0);
+    position.depositCount = BigInt.fromI32(0);
+    position.withdrawalCount = BigInt.fromI32(0);
+    position.firstDepositAt = null;
+    position.lastActivityAt = timestamp;
+    position.isActive = false;
+    position.save();
+  }
+  
+  return position;
+}
+
+/**
+ * Helper function to calculate USDC value from WETH amount and price
+ */
+function calculateUSDCValue(wethAmount: BigInt, wethPriceInUSDC: BigInt): BigInt {
+  // wethPriceInUSDC is the price of 1 WETH (1e18) in USDC (6 decimals)
+  // wethAmount is in wei (18 decimals)
+  // Result should be in USDC units (6 decimals)
+  
+  // (wethAmount * wethPriceInUSDC) / 1e18
+  return wethAmount.times(wethPriceInUSDC).div(BigInt.fromString("1000000000000000000"));
 }
 
 export function handleAgentUpdated(event: AgentUpdated): void {
@@ -147,24 +214,118 @@ export function handleTargetWeightsUpdated(event: TargetWeightsUpdated): void {
 }
 
 export function handleWETHDepositedAndSharesMinted(event: WETHDepositedAndSharesMinted): void {
+  // Get or create user
+  let user = getOrCreateUser(event.params.depositor, event.block.timestamp);
+  
+  // Calculate USDC value of the deposit
+  let depositValueInUSDC = calculateUSDCValue(event.params.wethDeposited, event.params.wethValueInUSDC);
+  
+  // Update user totals
+  user.totalDepositedUSDC = user.totalDepositedUSDC.plus(depositValueInUSDC);
+  user.lastActivityAt = event.block.timestamp;
+  user.save();
+  
+  // Get or create user position in this fund
+  let position = getOrCreateUserFundPosition(event.params.depositor, event.address, event.block.timestamp);
+  
+  // Update position
+  position.shareBalance = position.shareBalance.plus(event.params.sharesMinted);
+  position.totalDepositedWETH = position.totalDepositedWETH.plus(event.params.wethDeposited);
+  position.totalDepositedUSDC = position.totalDepositedUSDC.plus(depositValueInUSDC);
+  position.depositCount = position.depositCount.plus(BigInt.fromI32(1));
+  if (!position.firstDepositAt) {
+    position.firstDepositAt = event.block.timestamp;
+  }
+  position.lastActivityAt = event.block.timestamp;
+  position.isActive = true;
+  position.save();
+
+  // Create deposit entity
+  let depositId = event.transaction.hash.toHexString() + "-" + event.logIndex.toString();
+  let deposit = new Deposit(depositId);
+  deposit.fund = event.address.toHexString();
+  deposit.depositor = user.id; // Reference to User entity
+  deposit.receiver = event.params.receiver;
+  deposit.wethDeposited = event.params.wethDeposited;
+  deposit.sharesMinted = event.params.sharesMinted;
+  deposit.navBeforeDepositWETH = event.params.navBeforeDepositWETH;
+  deposit.totalSupplyBeforeDeposit = event.params.totalSupplyBeforeDeposit;
+  deposit.wethValueInUSDC = event.params.wethValueInUSDC;
+  deposit.depositValueInUSDC = depositValueInUSDC;
+  deposit.timestamp = event.block.timestamp;
+  deposit.blockNumber = event.block.number;
+  deposit.transactionHash = event.transaction.hash;
+  deposit.save();
+
   // Create NAV snapshot
   createOrUpdateNAVSnapshot(
     event.address,
     event.block.number,
     event.block.timestamp,
     "deposit",
-    event.transaction.hash
+    event.transaction.hash,
+    event.params.wethValueInUSDC
   );
 }
 
 export function handleBasketAssetsWithdrawn(event: BasketAssetsWithdrawn): void {
+  // Get or create user
+  let user = getOrCreateUser(event.params.owner, event.block.timestamp);
+  
+  // Calculate USDC value of the withdrawal
+  let withdrawalValueInUSDC = calculateUSDCValue(event.params.totalWETHValueOfWithdrawal, event.params.wethValueInUSDC);
+  
+  // Update user totals
+  user.totalWithdrawnUSDC = user.totalWithdrawnUSDC.plus(withdrawalValueInUSDC);
+  user.lastActivityAt = event.block.timestamp;
+  user.save();
+  
+  // Get or create user position in this fund
+  let position = getOrCreateUserFundPosition(event.params.owner, event.address, event.block.timestamp);
+  
+  // Update position
+  position.shareBalance = position.shareBalance.minus(event.params.sharesBurned);
+  position.totalWETHValueOfSharesWithdrawn = position.totalWETHValueOfSharesWithdrawn.plus(event.params.totalWETHValueOfWithdrawal);
+  position.totalUSDCValueOfSharesWithdrawn = position.totalUSDCValueOfSharesWithdrawn.plus(withdrawalValueInUSDC);
+  position.withdrawalCount = position.withdrawalCount.plus(BigInt.fromI32(1));
+  position.lastActivityAt = event.block.timestamp;
+  position.isActive = position.shareBalance.gt(BigInt.fromI32(0));
+  position.save();
+
+  // Create withdrawal entity
+  let withdrawalId = event.transaction.hash.toHexString() + "-" + event.logIndex.toString();
+  let withdrawal = new Withdrawal(withdrawalId);
+  withdrawal.fund = event.address.toHexString();
+  withdrawal.owner = user.id; // Reference to User entity
+  withdrawal.receiver = event.params.receiver;
+  withdrawal.sharesBurned = event.params.sharesBurned;
+  
+  // Convert Address array to Bytes array
+  let tokensWithdrawn: Bytes[] = [];
+  for (let i = 0; i < event.params.tokensWithdrawn.length; i++) {
+    tokensWithdrawn.push(event.params.tokensWithdrawn[i]);
+  }
+  withdrawal.tokensWithdrawn = tokensWithdrawn;
+  
+  withdrawal.amountsWithdrawn = event.params.amountsWithdrawn;
+  withdrawal.navBeforeWithdrawalWETH = event.params.navBeforeWithdrawalWETH;
+  withdrawal.totalSupplyBeforeWithdrawal = event.params.totalSupplyBeforeWithdrawal;
+  withdrawal.totalWETHValueOfWithdrawal = event.params.totalWETHValueOfWithdrawal;
+  withdrawal.wethValueInUSDC = event.params.wethValueInUSDC;
+  withdrawal.withdrawalValueInUSDC = withdrawalValueInUSDC;
+  withdrawal.timestamp = event.block.timestamp;
+  withdrawal.blockNumber = event.block.number;
+  withdrawal.transactionHash = event.transaction.hash;
+  withdrawal.save();
+
   // Create NAV snapshot
   createOrUpdateNAVSnapshot(
     event.address,
     event.block.number,
     event.block.timestamp,
     "withdrawal",
-    event.transaction.hash
+    event.transaction.hash,
+    event.params.wethValueInUSDC
   );
 }
 
@@ -175,6 +336,31 @@ export function handleAgentAumFeeCollected(event: AgentAumFeeCollected): void {
     event.block.number,
     event.block.timestamp,
     "fee",
-    event.transaction.hash
+    event.transaction.hash,
+    event.params.wethValueInUSDC
+  );
+}
+
+export function handleRebalanceCycleExecuted(event: RebalanceCycleExecuted): void {
+  // Create rebalance cycle entity
+  let rebalanceCycleId = event.transaction.hash.toHexString() + "-" + event.logIndex.toString();
+  let rebalanceCycle = new RebalanceCycle(rebalanceCycleId);
+  rebalanceCycle.fund = event.address.toHexString();
+  rebalanceCycle.navBeforeRebalanceAA = event.params.navBeforeRebalanceAA;
+  rebalanceCycle.navAfterRebalanceAA = event.params.navAfterRebalanceAA;
+  rebalanceCycle.wethValueInUSDC = event.params.wethValueInUSDC;
+  rebalanceCycle.timestamp = event.block.timestamp;
+  rebalanceCycle.blockNumber = event.block.number;
+  rebalanceCycle.transactionHash = event.transaction.hash;
+  rebalanceCycle.save();
+
+  // Create NAV snapshot
+  createOrUpdateNAVSnapshot(
+    event.address,
+    event.block.number,
+    event.block.timestamp,
+    "rebalance",
+    event.transaction.hash,
+    event.params.wethValueInUSDC
   );
 } 

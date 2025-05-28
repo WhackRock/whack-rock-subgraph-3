@@ -48,9 +48,13 @@ type Fund @entity(immutable: false) {
   navSnapshots: [FundNAVSnapshot!]! @derivedFrom(field: "fund")
   currentNAVInUSDC: BigInt!
   lastNAVUpdate: BigInt!
+  lastWethValueInUSDC: BigInt! # Value of 1 WETH in USDC, updated by events
   
   # ERC20 data
   totalSupply: BigInt!
+  
+  # User positions
+  positions: [UserFundPosition!]! @derivedFrom(field: "fund")
   
   # Timestamps
   createdAt: BigInt!
@@ -84,6 +88,9 @@ type FundNAVSnapshot @entity(immutable: true) {
   timestamp: BigInt! # Timestamp rounded to the hour
   blockNumber: BigInt! # Block number of the snapshot
   
+  # WETH price at the time of the snapshot
+  wethValueInUSDC: BigInt! # Value of 1 WETH in USDC units
+  
   # Source information
   triggeredBy: String! # What triggered this snapshot (deposit, withdrawal, fee, manual)
   transactionHash: Bytes! # Transaction that triggered the snapshot
@@ -110,4 +117,92 @@ type GlobalStats @entity(immutable: false) {
   totalRegistryAllowedTokens: BigInt!
   totalValueLockedUSDC: BigInt! # Sum of all fund NAVs
   lastUpdated: BigInt!
+}
+
+"""
+Individual user tracking
+"""
+type User @entity(immutable: false) {
+  id: ID! # User address
+  address: Bytes!
+  positions: [UserFundPosition!]! @derivedFrom(field: "user")
+  deposits: [Deposit!]! @derivedFrom(field: "depositor")
+  withdrawals: [Withdrawal!]! @derivedFrom(field: "owner")
+  totalDepositedUSDC: BigInt! # Total USDC value deposited across all funds
+  totalWithdrawnUSDC: BigInt! # Total USDC value withdrawn across all funds
+  firstActivityAt: BigInt!
+  lastActivityAt: BigInt!
+}
+
+"""
+User's position in a specific fund
+"""
+type UserFundPosition @entity(immutable: false) {
+  id: ID! # User address + fund address
+  user: User!
+  fund: Fund!
+  shareBalance: BigInt! # Current share balance
+  totalDepositedWETH: BigInt! # Total WETH deposited by the user into this fund
+  totalDepositedUSDC: BigInt! # Total USDC value of WETH deposited at the time of deposit
+  totalWETHValueOfSharesWithdrawn: BigInt! # Total WETH value of shares withdrawn by the user from this fund
+  totalUSDCValueOfSharesWithdrawn: BigInt! # Total USDC value of shares withdrawn at the time of withdrawal
+  depositCount: BigInt! # Number of deposits
+  withdrawalCount: BigInt! # Number of withdrawals
+  firstDepositAt: BigInt
+  lastActivityAt: BigInt!
+  isActive: Boolean! # True if shareBalance > 0
+}
+
+"""
+Individual deposit transaction
+"""
+type Deposit @entity(immutable: true) {
+  id: ID! # Transaction hash + log index
+  fund: Fund!
+  depositor: User! # User who deposited
+  receiver: Bytes! # Address that received shares
+  wethDeposited: BigInt! # Amount of WETH deposited
+  sharesMinted: BigInt! # Amount of shares minted
+  navBeforeDepositWETH: BigInt! # NAV in WETH before deposit
+  totalSupplyBeforeDeposit: BigInt! # Total share supply before deposit
+  wethValueInUSDC: BigInt! # Value of 1 WETH in USDC at time of deposit
+  depositValueInUSDC: BigInt! # (wethDeposited * wethValueInUSDC) / 1e18
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+}
+
+"""
+Individual withdrawal transaction
+"""
+type Withdrawal @entity(immutable: true) {
+  id: ID! # Transaction hash + log index
+  fund: Fund!
+  owner: User! # User who owned the shares
+  receiver: Bytes! # Address that received the assets
+  sharesBurned: BigInt! # Amount of shares burned
+  tokensWithdrawn: [Bytes!]! # Array of token addresses withdrawn
+  amountsWithdrawn: [BigInt!]! # Array of token amounts withdrawn
+  navBeforeWithdrawalWETH: BigInt! # NAV in WETH before withdrawal
+  totalSupplyBeforeWithdrawal: BigInt! # Total supply before withdrawal
+  totalWETHValueOfWithdrawal: BigInt! # Total WETH value of the assets withdrawn
+  wethValueInUSDC: BigInt! # Value of 1 WETH in USDC at time of withdrawal
+  withdrawalValueInUSDC: BigInt! # (totalWETHValueOfWithdrawal * wethValueInUSDC) / 1e18
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+}
+
+"""
+Rebalance cycle event
+"""
+type RebalanceCycle @entity(immutable: true) {
+  id: ID! # Transaction hash + log index
+  fund: Fund!
+  navBeforeRebalanceAA: BigInt! # NAV in WETH before rebalance
+  navAfterRebalanceAA: BigInt! # NAV in WETH after rebalance
+  wethValueInUSDC: BigInt! # Value of 1 WETH in USDC at time of rebalance
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
 } 

@@ -1,6 +1,90 @@
-# WhackRock Funds Subgraph
+# WhackRock Fund Subgraph
 
-A subgraph for indexing WhackRock Fund Registry and individual funds on Base network.
+This subgraph indexes the WhackRock Fund protocol, tracking fund management, user deposits, withdrawals, and NAV calculations.
+
+## Key Features
+
+### User Deposit Tracking
+
+The subgraph properly accounts for user deposits through the `WETHDepositedAndSharesMinted` event handler:
+
+1. **User Entity Creation**: When a user makes their first deposit, a `User` entity is created tracking:
+   - Total USDC value deposited across all funds
+   - Total USDC value withdrawn across all funds
+   - First and last activity timestamps
+
+2. **User Fund Position**: Each user's position in a specific fund is tracked via `UserFundPosition` entities:
+   - Current share balance
+   - Total WETH deposited
+   - Total USDC value of deposits (calculated at time of deposit)
+   - Total WETH value of shares withdrawn
+   - Total USDC value of withdrawals
+   - Deposit and withdrawal counts
+   - Active status (true if shareBalance > 0)
+
+3. **Individual Deposits**: Each deposit creates a `Deposit` entity storing:
+   - WETH amount deposited
+   - Shares minted
+   - NAV before deposit
+   - WETH price in USDC at time of deposit
+   - Calculated USDC value of the deposit
+
+### NAV Tracking
+
+The subgraph creates hourly NAV snapshots triggered by:
+- Deposits
+- Withdrawals
+- Fee collections
+- Rebalancing
+
+Each snapshot stores:
+- NAV in USDC
+- Total supply of shares
+- NAV per share
+- WETH price in USDC
+
+### Price Calculations
+
+USDC values are calculated using the WETH price provided in events:
+```typescript
+// wethPriceInUSDC is the price of 1 WETH (1e18) in USDC (6 decimals)
+// wethAmount is in wei (18 decimals)
+// Result is in USDC units (6 decimals)
+usdcValue = (wethAmount * wethPriceInUSDC) / 1e18
+```
+
+## Build & Deploy
+
+```bash
+# Install dependencies
+npm install
+
+# Generate code from schema
+npm run codegen
+
+# Build the subgraph
+npm run build
+
+# Deploy to The Graph
+npm run deploy
+```
+
+## Entities
+
+- **Fund**: Represents a WhackRock fund with its configuration, allowed tokens, and current NAV
+- **User**: Tracks individual users across all funds
+- **UserFundPosition**: Tracks a user's position in a specific fund
+- **Deposit**: Records individual deposit transactions
+- **Withdrawal**: Records individual withdrawal transactions
+- **FundNAVSnapshot**: Hourly snapshots of fund NAV
+- **Agent**: Tracks fund managers
+- **FundToken**: Tokens allowed in a fund with target weights
+
+## Recent Fixes
+
+1. Fixed field name mismatches: `totalWithdrawnWETH` → `totalWETHValueOfSharesWithdrawn`
+2. Fixed BigInt power calculation using `BigInt.fromString("1000000000000000000")` instead of `BigInt.fromI32(10).pow(18)`
+3. Fixed null check for `firstDepositAt` using `!position.firstDepositAt` instead of `== null`
 
 ## Features
 

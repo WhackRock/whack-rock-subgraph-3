@@ -6,9 +6,9 @@ dataSources:
     name: WhackRockFundRegistry
     network: base
     source:
-      address: "0x2b9e3ddfa63e3e93b931fcad8fa98307225dfb0f"
+      address: "0x7454bDdfF6B33482F69178649b713EA8f28ab807"
       abi: WhackRockFundRegistry
-      startBlock: 30730184
+      startBlock: 30820332
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -54,6 +54,11 @@ templates:
         - FundToken
         - FundNAVSnapshot
         - Agent
+        - User
+        - UserFundPosition
+        - Deposit
+        - Withdrawal
+        - RebalanceCycle
       abis:
         - name: WhackRockFund
           file: WhackRockFund\WhackRockFund.json
@@ -63,12 +68,14 @@ templates:
         - event: TargetWeightsUpdated(indexed address,address[],uint256[],uint256)
           handler: handleTargetWeightsUpdated
         - event: WETHDepositedAndSharesMinted(indexed address,indexed
-            address,uint256,uint256,uint256,uint256)
+            address,uint256,uint256,uint256,uint256,uint256)
           handler: handleWETHDepositedAndSharesMinted
         - event: BasketAssetsWithdrawn(indexed address,indexed
-            address,uint256,address[],uint256[],uint256,uint256,uint256)
+            address,uint256,address[],uint256[],uint256,uint256,uint256,uint256)
           handler: handleBasketAssetsWithdrawn
         - event: AgentAumFeeCollected(indexed address,uint256,indexed
-            address,uint256,uint256,uint256,uint256,uint256)
+            address,uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleAgentAumFeeCollected
+        - event: RebalanceCycleExecuted(uint256,uint256,uint256,uint256)
+          handler: handleRebalanceCycleExecuted
       file: templates\WhackRockFund\WhackRockFund.wasm
