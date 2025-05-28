@@ -223,26 +223,23 @@ export function handleHourlyNAVUpdate(block: ethereum.Block): void {
     fund.save();
     
     // Create hourly snapshot
-    let snapshotId = fundAddress.toHexString() + "-" + hourTimestamp.toString();
-    let snapshot = FundNAVSnapshot.load(snapshotId);
+    let snapshotId = fundAddress.toHexString() + "-" + hourTimestamp.toString() + "-hourly-" + block.number.toString();
     
-    // Only create a new snapshot if one doesn't exist for this hour
-    if (snapshot == null) {
-      snapshot = new FundNAVSnapshot(snapshotId);
-      snapshot.fund = fund.id;
-      snapshot.timestamp = hourTimestamp;
-      snapshot.navInUSDC = navInUSDC;
-      snapshot.totalSupply = totalSupply;
-      snapshot.blockNumber = block.number;
-      snapshot.triggeredBy = "hourly";
-      snapshot.transactionHash = ZERO_BYTES;
-      snapshot.wethValueInUSDC = BigInt.fromI32(0); // Default value for hourly updates since we can't get WETH price from block handler
-      
-      // Calculate NAV per share
-      snapshot.navPerShare = calculateNavPerShare(navInUSDC, totalSupply);
-      
-      snapshot.save();
-    }
+    // Since FundNAVSnapshot is immutable, we only create new ones
+    let snapshot = new FundNAVSnapshot(snapshotId);
+    snapshot.fund = fund.id;
+    snapshot.timestamp = hourTimestamp;
+    snapshot.navInUSDC = navInUSDC;
+    snapshot.totalSupply = totalSupply;
+    snapshot.blockNumber = block.number;
+    snapshot.triggeredBy = "hourly";
+    snapshot.transactionHash = ZERO_BYTES;
+    snapshot.wethValueInUSDC = BigInt.fromI32(0); // Default value for hourly updates since we can't get WETH price from block handler
+    
+    // Calculate NAV per share
+    snapshot.navPerShare = calculateNavPerShare(navInUSDC, totalSupply);
+    
+    snapshot.save();
     
     // Add to total TVL
     totalTVL = totalTVL.plus(navInUSDC);

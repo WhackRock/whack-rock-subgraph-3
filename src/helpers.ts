@@ -1,7 +1,7 @@
 import { BigInt, BigDecimal, Bytes } from "@graphprotocol/graph-ts";
 
 // Constants
-export const REGISTRY_ADDRESS = "0x7454bDdfF6B33482F69178649b713EA8f28ab807"; // This will be replaced with actual address
+export const REGISTRY_ADDRESS = "0x0B606A3B7ed0dFD34aE60263F0AE221d5C7de75B"; // This will be replaced with actual address
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 export const ZERO_BYTES = Bytes.fromHexString("0x0000000000000000000000000000000000000000000000000000000000000000");
 

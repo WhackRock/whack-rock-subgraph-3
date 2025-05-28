@@ -23,9 +23,10 @@ import {
 import { roundToHour, calculateNavPerShare } from "./helpers";
 
 /**
- * Helper function to create or update hourly NAV snapshot
+ * Helper function to create NAV snapshot
+ * Creates a new immutable snapshot with a unique ID for each event
  */
-function createOrUpdateNAVSnapshot(
+function createNAVSnapshot(
   fundAddress: Address,
   blockNumber: BigInt,
   timestamp: BigInt,
@@ -53,20 +54,25 @@ function createOrUpdateNAVSnapshot(
   fund.lastNAVUpdate = timestamp;
   fund.totalSupply = totalSupply;
   fund.updatedAt = timestamp;
+  
+  // Update WETH value if we have it (not zero)
+  if (wethValueInUSDC.gt(BigInt.fromI32(0))) {
+    fund.lastWethValueInUSDC = wethValueInUSDC;
+  }
+  
   fund.save();
 
   // Round timestamp to hour
   let hourTimestamp = roundToHour(timestamp);
-  let snapshotId = fundAddress.toHexString() + "-" + hourTimestamp.toString();
+  
+  // Create unique snapshot ID that includes transaction hash and blockNumber to avoid collisions
+  // For immutable entities, we must ensure unique IDs
+  let snapshotId = fundAddress.toHexString() + "-" + hourTimestamp.toString() + "-" + transactionHash.toHexString() + "-" + blockNumber.toString();
 
-  // Create or update hourly snapshot
-  let snapshot = FundNAVSnapshot.load(snapshotId);
-  if (snapshot == null) {
-    snapshot = new FundNAVSnapshot(snapshotId);
-    snapshot.fund = fund.id;
-    snapshot.timestamp = hourTimestamp;
-  }
-
+  // Since FundNAVSnapshot is immutable, we only create new ones
+  let snapshot = new FundNAVSnapshot(snapshotId);
+  snapshot.fund = fund.id;
+  snapshot.timestamp = hourTimestamp;
   snapshot.navInUSDC = navInUSDC;
   snapshot.totalSupply = totalSupply;
   snapshot.blockNumber = blockNumber;
@@ -258,7 +264,7 @@ export function handleWETHDepositedAndSharesMinted(event: WETHDepositedAndShares
   deposit.save();
 
   // Create NAV snapshot
-  createOrUpdateNAVSnapshot(
+  createNAVSnapshot(
     event.address,
     event.block.number,
     event.block.timestamp,
@@ -319,7 +325,7 @@ export function handleBasketAssetsWithdrawn(event: BasketAssetsWithdrawn): void 
   withdrawal.save();
 
   // Create NAV snapshot
-  createOrUpdateNAVSnapshot(
+  createNAVSnapshot(
     event.address,
     event.block.number,
     event.block.timestamp,
@@ -331,7 +337,7 @@ export function handleBasketAssetsWithdrawn(event: BasketAssetsWithdrawn): void 
 
 export function handleAgentAumFeeCollected(event: AgentAumFeeCollected): void {
   // Create NAV snapshot
-  createOrUpdateNAVSnapshot(
+  createNAVSnapshot(
     event.address,
     event.block.number,
     event.block.timestamp,
@@ -355,7 +361,7 @@ export function handleRebalanceCycleExecuted(event: RebalanceCycleExecuted): voi
   rebalanceCycle.save();
 
   // Create NAV snapshot
-  createOrUpdateNAVSnapshot(
+  createNAVSnapshot(
     event.address,
     event.block.number,
     event.block.timestamp,
