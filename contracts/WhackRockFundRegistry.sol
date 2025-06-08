@@ -117,7 +117,7 @@ contract WhackRockFundRegistry is Initializable, UUPSUpgradeable, OwnableUpgrade
         __Ownable_init(_initialOwner); 
         __UUPSUpgradeable_init();    
 
-        require(_aerodromeRouterAddress != address(0), "Registry: Aerodrome router zero");
+        require(_aerodromeRouterAddress != address(0), "Registry: Router zero");
         require(_maxInitialFundTokensLength > 0, "Registry: Max fund tokens must be > 0");
         require(_usdcTokenAddress != address(0), "Registry: USDC address zero");
         require(_whackRockRewardsAddr != address(0), "Registry: Rewards address zero");
@@ -158,12 +158,32 @@ contract WhackRockFundRegistry is Initializable, UUPSUpgradeable, OwnableUpgrade
      * @param _token Address of the token to add
      */
     function addRegistryAllowedToken(address _token) external override onlyOwner {
+        require(!isTokenAllowedInRegistry[_token], "Registry: Token already allowed");
+        _addRegistryAllowedToken(_token);
+    }
+
+    /**
+     * @notice Adds a token to the registry's global allowlist
+     * @dev Only callable by owner, cannot add address(0) or WETH
+     * @param _token Address of the token to add
+     */
+    function _addRegistryAllowedToken(address _token) internal {
         require(_token != address(0), "Registry: Token zero");
         require(_token != WETH_ADDRESS, "Registry: WETH not allowed");
-        require(!isTokenAllowedInRegistry[_token], "Registry: Token already allowed");
         allowedTokensList.push(_token);
         isTokenAllowedInRegistry[_token] = true;
         emit RegistryAllowedTokenAdded(_token);
+    }
+
+    /**
+     * @notice Adds a tokens to the registry's global allowlist
+     * @dev Only callable by owner, cannot add address(0) or WETH
+     * @param _tokens Address of the token to add
+     */
+    function batchAddRegistryAllowedToken(address[] memory _tokens) external override onlyOwner {
+        for (uint i = 0; i < _tokens.length; i++) {
+            _addRegistryAllowedToken(_tokens[i]);
+        }
     }
 
     /**
@@ -252,6 +272,7 @@ contract WhackRockFundRegistry is Initializable, UUPSUpgradeable, OwnableUpgrade
         uint256[] memory _initialTargetWeights,
         string memory _vaultName,
         string memory _vaultSymbol,
+        string memory _vaultURI,
         address _agentAumFeeWalletForFund, 
         uint256 _agentSetTotalAumFeeBps 
     ) external override returns (address fundAddress) {
@@ -279,6 +300,7 @@ contract WhackRockFundRegistry is Initializable, UUPSUpgradeable, OwnableUpgrade
             _initialTargetWeights,
             _vaultName,
             _vaultSymbol,
+            _vaultURI,
             _agentAumFeeWalletForFund,     
             _agentSetTotalAumFeeBps,       
             protocolAumFeeRecipientForFunds,
@@ -294,7 +316,7 @@ contract WhackRockFundRegistry is Initializable, UUPSUpgradeable, OwnableUpgrade
         fundCounter++;
 
         emit WhackRockFundCreated(
-            fundCounter, fundAddress, msg.sender, _initialAgent, _vaultName, _vaultSymbol,
+            fundCounter, fundAddress, msg.sender, _initialAgent, _vaultName, _vaultSymbol, _vaultURI,
             _fundAllowedTokens, _initialTargetWeights, 
             _agentAumFeeWalletForFund, 
             _agentSetTotalAumFeeBps,    

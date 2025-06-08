@@ -54,10 +54,6 @@ export class AgentAumFeeCollected__Params {
   get timestamp(): BigInt {
     return this._event.parameters[7].value.toBigInt();
   }
-
-  get wethValueInUSDC(): BigInt {
-    return this._event.parameters[8].value.toBigInt();
-  }
 }
 
 export class AgentUpdated extends ethereum.Event {
@@ -309,6 +305,78 @@ export class WETHDepositedAndSharesMinted__Params {
 
   get wethValueInUSDC(): BigInt {
     return this._event.parameters[6].value.toBigInt();
+  }
+}
+
+export class WhackRockFund__getCurrentCompositionBPSResult {
+  value0: Array<BigInt>;
+  value1: Array<Address>;
+  value2: Array<string>;
+
+  constructor(
+    value0: Array<BigInt>,
+    value1: Array<Address>,
+    value2: Array<string>,
+  ) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigIntArray(this.value0));
+    map.set("value1", ethereum.Value.fromAddressArray(this.value1));
+    map.set("value2", ethereum.Value.fromStringArray(this.value2));
+    return map;
+  }
+
+  getCurrentComposition_(): Array<BigInt> {
+    return this.value0;
+  }
+
+  getTokenAddresses_(): Array<Address> {
+    return this.value1;
+  }
+
+  getTokenSymbols_(): Array<string> {
+    return this.value2;
+  }
+}
+
+export class WhackRockFund__getTargetCompositionBPSResult {
+  value0: Array<BigInt>;
+  value1: Array<Address>;
+  value2: Array<string>;
+
+  constructor(
+    value0: Array<BigInt>,
+    value1: Array<Address>,
+    value2: Array<string>,
+  ) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigIntArray(this.value0));
+    map.set("value1", ethereum.Value.fromAddressArray(this.value1));
+    map.set("value2", ethereum.Value.fromStringArray(this.value2));
+    return map;
+  }
+
+  getTargetComposition_(): Array<BigInt> {
+    return this.value0;
+  }
+
+  getTokenAddresses_(): Array<Address> {
+    return this.value1;
+  }
+
+  getTokenSymbols_(): Array<string> {
+    return this.value2;
   }
 }
 
@@ -639,6 +707,72 @@ export class WhackRockFund extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  getCurrentCompositionBPS(): WhackRockFund__getCurrentCompositionBPSResult {
+    let result = super.call(
+      "getCurrentCompositionBPS",
+      "getCurrentCompositionBPS():(uint256[],address[],string[])",
+      [],
+    );
+
+    return new WhackRockFund__getCurrentCompositionBPSResult(
+      result[0].toBigIntArray(),
+      result[1].toAddressArray(),
+      result[2].toStringArray(),
+    );
+  }
+
+  try_getCurrentCompositionBPS(): ethereum.CallResult<WhackRockFund__getCurrentCompositionBPSResult> {
+    let result = super.tryCall(
+      "getCurrentCompositionBPS",
+      "getCurrentCompositionBPS():(uint256[],address[],string[])",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new WhackRockFund__getCurrentCompositionBPSResult(
+        value[0].toBigIntArray(),
+        value[1].toAddressArray(),
+        value[2].toStringArray(),
+      ),
+    );
+  }
+
+  getTargetCompositionBPS(): WhackRockFund__getTargetCompositionBPSResult {
+    let result = super.call(
+      "getTargetCompositionBPS",
+      "getTargetCompositionBPS():(uint256[],address[],string[])",
+      [],
+    );
+
+    return new WhackRockFund__getTargetCompositionBPSResult(
+      result[0].toBigIntArray(),
+      result[1].toAddressArray(),
+      result[2].toStringArray(),
+    );
+  }
+
+  try_getTargetCompositionBPS(): ethereum.CallResult<WhackRockFund__getTargetCompositionBPSResult> {
+    let result = super.tryCall(
+      "getTargetCompositionBPS",
+      "getTargetCompositionBPS():(uint256[],address[],string[])",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new WhackRockFund__getTargetCompositionBPSResult(
+        value[0].toBigIntArray(),
+        value[1].toAddressArray(),
+        value[2].toStringArray(),
+      ),
+    );
+  }
+
   isAllowedTokenInternal(token: Address): boolean {
     let result = super.call(
       "isAllowedTokenInternal",
@@ -766,21 +900,6 @@ export class WhackRockFund extends ethereum.SmartContract {
       "totalNAVInUSDC():(uint256)",
       [],
     );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  totalSupply(): BigInt {
-    let result = super.call("totalSupply", "totalSupply():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_totalSupply(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("totalSupply", "totalSupply():(uint256)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -981,6 +1100,36 @@ export class SetTargetWeightsCall__Outputs {
   _call: SetTargetWeightsCall;
 
   constructor(call: SetTargetWeightsCall) {
+    this._call = call;
+  }
+}
+
+export class SetTargetWeightsAndRebalanceIfNeededCall extends ethereum.Call {
+  get inputs(): SetTargetWeightsAndRebalanceIfNeededCall__Inputs {
+    return new SetTargetWeightsAndRebalanceIfNeededCall__Inputs(this);
+  }
+
+  get outputs(): SetTargetWeightsAndRebalanceIfNeededCall__Outputs {
+    return new SetTargetWeightsAndRebalanceIfNeededCall__Outputs(this);
+  }
+}
+
+export class SetTargetWeightsAndRebalanceIfNeededCall__Inputs {
+  _call: SetTargetWeightsAndRebalanceIfNeededCall;
+
+  constructor(call: SetTargetWeightsAndRebalanceIfNeededCall) {
+    this._call = call;
+  }
+
+  get _weights(): Array<BigInt> {
+    return this._call.inputValues[0].value.toBigIntArray();
+  }
+}
+
+export class SetTargetWeightsAndRebalanceIfNeededCall__Outputs {
+  _call: SetTargetWeightsAndRebalanceIfNeededCall;
+
+  constructor(call: SetTargetWeightsAndRebalanceIfNeededCall) {
     this._call = call;
   }
 }

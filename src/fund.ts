@@ -8,6 +8,7 @@ import {
   RebalanceCycleExecuted,
   WhackRockFund as FundContract
 } from "../generated/templates/WhackRockFund/WhackRockFund";
+import { IERC20 } from "../generated/templates/WhackRockFund/IERC20";
 import {
   Fund,
   FundToken,
@@ -40,7 +41,10 @@ function createNAVSnapshot(
   // Get current NAV from contract
   let fundContract = FundContract.bind(fundAddress);
   let navInUSDCResult = fundContract.try_totalNAVInUSDC();
-  let totalSupplyResult = fundContract.try_totalSupply();
+  
+  // Get total supply using IERC20 interface since WhackRockFund inherits from ERC20
+  let erc20Contract = IERC20.bind(fundAddress);
+  let totalSupplyResult = erc20Contract.try_totalSupply();
 
   if (navInUSDCResult.reverted || totalSupplyResult.reverted) {
     return;
@@ -336,14 +340,24 @@ export function handleBasketAssetsWithdrawn(event: BasketAssetsWithdrawn): void 
 }
 
 export function handleAgentAumFeeCollected(event: AgentAumFeeCollected): void {
+  // Get the fund to access the last known WETH value
+  let fund = Fund.load(event.address.toHexString());
+  let lastWethValue = BigInt.fromI32(0);
+  
+  if (fund != null) {
+    lastWethValue = fund.lastWethValueInUSDC;
+  }
+  
   // Create NAV snapshot
+  // Note: AgentAumFeeCollected event doesn't have wethValueInUSDC parameter, 
+  // so we use the last known WETH value from the fund
   createNAVSnapshot(
     event.address,
     event.block.number,
     event.block.timestamp,
     "fee",
     event.transaction.hash,
-    event.params.wethValueInUSDC
+    lastWethValue // Use last known WETH value instead of zero
   );
 }
 

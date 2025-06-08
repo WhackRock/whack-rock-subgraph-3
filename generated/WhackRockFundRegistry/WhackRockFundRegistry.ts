@@ -10,61 +10,21 @@ import {
   BigInt,
 } from "@graphprotocol/graph-ts";
 
-export class WhackRockFundCreated extends ethereum.Event {
-  get params(): WhackRockFundCreated__Params {
-    return new WhackRockFundCreated__Params(this);
+export class MaxInitialAllowedTokensLengthUpdated extends ethereum.Event {
+  get params(): MaxInitialAllowedTokensLengthUpdated__Params {
+    return new MaxInitialAllowedTokensLengthUpdated__Params(this);
   }
 }
 
-export class WhackRockFundCreated__Params {
-  _event: WhackRockFundCreated;
+export class MaxInitialAllowedTokensLengthUpdated__Params {
+  _event: MaxInitialAllowedTokensLengthUpdated;
 
-  constructor(event: WhackRockFundCreated) {
+  constructor(event: MaxInitialAllowedTokensLengthUpdated) {
     this._event = event;
   }
 
-  get fundId(): BigInt {
+  get newLength(): BigInt {
     return this._event.parameters[0].value.toBigInt();
-  }
-
-  get fundAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get creator(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get initialAgent(): Address {
-    return this._event.parameters[3].value.toAddress();
-  }
-
-  get vaultName(): string {
-    return this._event.parameters[4].value.toString();
-  }
-
-  get vaultSymbol(): string {
-    return this._event.parameters[5].value.toString();
-  }
-
-  get allowedTokens(): Array<Address> {
-    return this._event.parameters[6].value.toAddressArray();
-  }
-
-  get targetWeights(): Array<BigInt> {
-    return this._event.parameters[7].value.toBigIntArray();
-  }
-
-  get agentAumFeeWallet(): Address {
-    return this._event.parameters[8].value.toAddress();
-  }
-
-  get agentTotalAumFeeBps(): BigInt {
-    return this._event.parameters[9].value.toBigInt();
-  }
-
-  get timestamp(): BigInt {
-    return this._event.parameters[10].value.toBigInt();
   }
 }
 
@@ -101,24 +61,6 @@ export class RegistryAllowedTokenRemoved__Params {
 
   get token(): Address {
     return this._event.parameters[0].value.toAddress();
-  }
-}
-
-export class MaxInitialAllowedTokensLengthUpdated extends ethereum.Event {
-  get params(): MaxInitialAllowedTokensLengthUpdated__Params {
-    return new MaxInitialAllowedTokensLengthUpdated__Params(this);
-  }
-}
-
-export class MaxInitialAllowedTokensLengthUpdated__Params {
-  _event: MaxInitialAllowedTokensLengthUpdated;
-
-  constructor(event: MaxInitialAllowedTokensLengthUpdated) {
-    this._event = event;
-  }
-
-  get newLength(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
   }
 }
 
@@ -160,6 +102,68 @@ export class RegistryParamsUpdated__Params {
   }
 }
 
+export class WhackRockFundCreated extends ethereum.Event {
+  get params(): WhackRockFundCreated__Params {
+    return new WhackRockFundCreated__Params(this);
+  }
+}
+
+export class WhackRockFundCreated__Params {
+  _event: WhackRockFundCreated;
+
+  constructor(event: WhackRockFundCreated) {
+    this._event = event;
+  }
+
+  get fundId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get fundAddress(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get creator(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+
+  get initialAgent(): Address {
+    return this._event.parameters[3].value.toAddress();
+  }
+
+  get vaultName(): string {
+    return this._event.parameters[4].value.toString();
+  }
+
+  get vaultSymbol(): string {
+    return this._event.parameters[5].value.toString();
+  }
+
+  get vaultURI(): string {
+    return this._event.parameters[6].value.toString();
+  }
+
+  get allowedTokens(): Array<Address> {
+    return this._event.parameters[7].value.toAddressArray();
+  }
+
+  get targetWeights(): Array<BigInt> {
+    return this._event.parameters[8].value.toBigIntArray();
+  }
+
+  get agentAumFeeWallet(): Address {
+    return this._event.parameters[9].value.toAddress();
+  }
+
+  get agentTotalAumFeeBps(): BigInt {
+    return this._event.parameters[10].value.toBigInt();
+  }
+
+  get timestamp(): BigInt {
+    return this._event.parameters[11].value.toBigInt();
+  }
+}
+
 export class WhackRockFundRegistry extends ethereum.SmartContract {
   static bind(address: Address): WhackRockFundRegistry {
     return new WhackRockFundRegistry("WhackRockFundRegistry", address);
@@ -171,18 +175,20 @@ export class WhackRockFundRegistry extends ethereum.SmartContract {
     _initialTargetWeights: Array<BigInt>,
     _vaultName: string,
     _vaultSymbol: string,
+    _vaultURI: string,
     _agentAumFeeWalletForFund: Address,
     _agentSetTotalAumFeeBps: BigInt,
   ): Address {
     let result = super.call(
       "createWhackRockFund",
-      "createWhackRockFund(address,address[],uint256[],string,string,address,uint256):(address)",
+      "createWhackRockFund(address,address[],uint256[],string,string,string,address,uint256):(address)",
       [
         ethereum.Value.fromAddress(_initialAgent),
         ethereum.Value.fromAddressArray(_fundAllowedTokens),
         ethereum.Value.fromUnsignedBigIntArray(_initialTargetWeights),
         ethereum.Value.fromString(_vaultName),
         ethereum.Value.fromString(_vaultSymbol),
+        ethereum.Value.fromString(_vaultURI),
         ethereum.Value.fromAddress(_agentAumFeeWalletForFund),
         ethereum.Value.fromUnsignedBigInt(_agentSetTotalAumFeeBps),
       ],
@@ -197,18 +203,20 @@ export class WhackRockFundRegistry extends ethereum.SmartContract {
     _initialTargetWeights: Array<BigInt>,
     _vaultName: string,
     _vaultSymbol: string,
+    _vaultURI: string,
     _agentAumFeeWalletForFund: Address,
     _agentSetTotalAumFeeBps: BigInt,
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "createWhackRockFund",
-      "createWhackRockFund(address,address[],uint256[],string,string,address,uint256):(address)",
+      "createWhackRockFund(address,address[],uint256[],string,string,string,address,uint256):(address)",
       [
         ethereum.Value.fromAddress(_initialAgent),
         ethereum.Value.fromAddressArray(_fundAllowedTokens),
         ethereum.Value.fromUnsignedBigIntArray(_initialTargetWeights),
         ethereum.Value.fromString(_vaultName),
         ethereum.Value.fromString(_vaultSymbol),
+        ethereum.Value.fromString(_vaultURI),
         ethereum.Value.fromAddress(_agentAumFeeWalletForFund),
         ethereum.Value.fromUnsignedBigInt(_agentSetTotalAumFeeBps),
       ],
@@ -288,52 +296,6 @@ export class WhackRockFundRegistry extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddressArray());
   }
-
-  allowedTokensList(param0: BigInt): Address {
-    let result = super.call(
-      "allowedTokensList",
-      "allowedTokensList(uint256):(address)",
-      [ethereum.Value.fromUnsignedBigInt(param0)],
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_allowedTokensList(param0: BigInt): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "allowedTokensList",
-      "allowedTokensList(uint256):(address)",
-      [ethereum.Value.fromUnsignedBigInt(param0)],
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  isTokenAllowedInRegistry(param0: Address): boolean {
-    let result = super.call(
-      "isTokenAllowedInRegistry",
-      "isTokenAllowedInRegistry(address):(bool)",
-      [ethereum.Value.fromAddress(param0)],
-    );
-
-    return result[0].toBoolean();
-  }
-
-  try_isTokenAllowedInRegistry(param0: Address): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "isTokenAllowedInRegistry",
-      "isTokenAllowedInRegistry(address):(bool)",
-      [ethereum.Value.fromAddress(param0)],
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
 }
 
 export class AddRegistryAllowedTokenCall extends ethereum.Call {
@@ -363,6 +325,98 @@ export class AddRegistryAllowedTokenCall__Outputs {
 
   constructor(call: AddRegistryAllowedTokenCall) {
     this._call = call;
+  }
+}
+
+export class BatchAddRegistryAllowedTokenCall extends ethereum.Call {
+  get inputs(): BatchAddRegistryAllowedTokenCall__Inputs {
+    return new BatchAddRegistryAllowedTokenCall__Inputs(this);
+  }
+
+  get outputs(): BatchAddRegistryAllowedTokenCall__Outputs {
+    return new BatchAddRegistryAllowedTokenCall__Outputs(this);
+  }
+}
+
+export class BatchAddRegistryAllowedTokenCall__Inputs {
+  _call: BatchAddRegistryAllowedTokenCall;
+
+  constructor(call: BatchAddRegistryAllowedTokenCall) {
+    this._call = call;
+  }
+
+  get _tokens(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
+  }
+}
+
+export class BatchAddRegistryAllowedTokenCall__Outputs {
+  _call: BatchAddRegistryAllowedTokenCall;
+
+  constructor(call: BatchAddRegistryAllowedTokenCall) {
+    this._call = call;
+  }
+}
+
+export class CreateWhackRockFundCall extends ethereum.Call {
+  get inputs(): CreateWhackRockFundCall__Inputs {
+    return new CreateWhackRockFundCall__Inputs(this);
+  }
+
+  get outputs(): CreateWhackRockFundCall__Outputs {
+    return new CreateWhackRockFundCall__Outputs(this);
+  }
+}
+
+export class CreateWhackRockFundCall__Inputs {
+  _call: CreateWhackRockFundCall;
+
+  constructor(call: CreateWhackRockFundCall) {
+    this._call = call;
+  }
+
+  get _initialAgent(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _fundAllowedTokens(): Array<Address> {
+    return this._call.inputValues[1].value.toAddressArray();
+  }
+
+  get _initialTargetWeights(): Array<BigInt> {
+    return this._call.inputValues[2].value.toBigIntArray();
+  }
+
+  get _vaultName(): string {
+    return this._call.inputValues[3].value.toString();
+  }
+
+  get _vaultSymbol(): string {
+    return this._call.inputValues[4].value.toString();
+  }
+
+  get _vaultURI(): string {
+    return this._call.inputValues[5].value.toString();
+  }
+
+  get _agentAumFeeWalletForFund(): Address {
+    return this._call.inputValues[6].value.toAddress();
+  }
+
+  get _agentSetTotalAumFeeBps(): BigInt {
+    return this._call.inputValues[7].value.toBigInt();
+  }
+}
+
+export class CreateWhackRockFundCall__Outputs {
+  _call: CreateWhackRockFundCall;
+
+  constructor(call: CreateWhackRockFundCall) {
+    this._call = call;
+  }
+
+  get fundAddress(): Address {
+    return this._call.outputValues[0].value.toAddress();
   }
 }
 
@@ -423,63 +477,5 @@ export class SetMaxInitialAllowedTokensLengthCall__Outputs {
 
   constructor(call: SetMaxInitialAllowedTokensLengthCall) {
     this._call = call;
-  }
-}
-
-export class CreateWhackRockFundCall extends ethereum.Call {
-  get inputs(): CreateWhackRockFundCall__Inputs {
-    return new CreateWhackRockFundCall__Inputs(this);
-  }
-
-  get outputs(): CreateWhackRockFundCall__Outputs {
-    return new CreateWhackRockFundCall__Outputs(this);
-  }
-}
-
-export class CreateWhackRockFundCall__Inputs {
-  _call: CreateWhackRockFundCall;
-
-  constructor(call: CreateWhackRockFundCall) {
-    this._call = call;
-  }
-
-  get _initialAgent(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get _fundAllowedTokens(): Array<Address> {
-    return this._call.inputValues[1].value.toAddressArray();
-  }
-
-  get _initialTargetWeights(): Array<BigInt> {
-    return this._call.inputValues[2].value.toBigIntArray();
-  }
-
-  get _vaultName(): string {
-    return this._call.inputValues[3].value.toString();
-  }
-
-  get _vaultSymbol(): string {
-    return this._call.inputValues[4].value.toString();
-  }
-
-  get _agentAumFeeWalletForFund(): Address {
-    return this._call.inputValues[5].value.toAddress();
-  }
-
-  get _agentSetTotalAumFeeBps(): BigInt {
-    return this._call.inputValues[6].value.toBigInt();
-  }
-}
-
-export class CreateWhackRockFundCall__Outputs {
-  _call: CreateWhackRockFundCall;
-
-  constructor(call: CreateWhackRockFundCall) {
-    this._call = call;
-  }
-
-  get fundAddress(): Address {
-    return this._call.outputValues[0].value.toAddress();
   }
 }

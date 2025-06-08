@@ -261,6 +261,52 @@
   },
   {
     "type": "function",
+    "name": "getCurrentCompositionBPS",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "currentComposition_",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      },
+      {
+        "name": "tokenAddresses_",
+        "type": "address[]",
+        "internalType": "address[]"
+      },
+      {
+        "name": "tokenSymbols_",
+        "type": "string[]",
+        "internalType": "string[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getTargetCompositionBPS",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "targetComposition_",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      },
+      {
+        "name": "tokenAddresses_",
+        "type": "address[]",
+        "internalType": "address[]"
+      },
+      {
+        "name": "tokenSymbols_",
+        "type": "string[]",
+        "internalType": "string[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "isAllowedTokenInternal",
     "inputs": [
       {
@@ -332,6 +378,19 @@
   },
   {
     "type": "function",
+    "name": "setTargetWeightsAndRebalanceIfNeeded",
+    "inputs": [
+      {
+        "name": "_weights",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "targetWeights",
     "inputs": [
       {
@@ -381,19 +440,6 @@
     "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "totalSupply",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -466,12 +512,6 @@
       },
       {
         "name": "timestamp",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "wethValueInUSDC",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"

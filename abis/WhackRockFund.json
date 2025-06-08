@@ -1,748 +1,788 @@
 [
-  {
-      "type": "function",
-      "name": "ACCOUNTING_ASSET",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "AGENT_AUM_FEE_SHARE_BPS",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "DEFAULT_POOL_STABILITY",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "bool",
-              "internalType": "bool"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "DEFAULT_SLIPPAGE_BPS",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "PROTOCOL_AUM_FEE_SHARE_BPS",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "REBALANCE_DEVIATION_THRESHOLD_BPS",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "SWAP_DEADLINE_OFFSET",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "TOTAL_WEIGHT_BASIS_POINTS",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "USDC_ADDRESS",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "agent",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "agentAumFeeBps",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "agentAumFeeWallet",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "allowedTokens",
-      "inputs": [
-          {
-              "name": "index",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "outputs": [
-          {
-              "name": "",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "collectAgentManagementFee",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-  },
-  {
-      "type": "function",
-      "name": "deposit",
-      "inputs": [
-          {
-              "name": "amountWETHToDeposit",
-              "type": "uint256",
-              "internalType": "uint256"
-          },
-          {
-              "name": "receiver",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "outputs": [
-          {
-              "name": "sharesMinted",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "nonpayable"
-  },
-  {
-      "type": "function",
-      "name": "dexRouter",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "address",
-              "internalType": "contract IAerodromeRouter"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "emergencyWithdrawERC20",
-      "inputs": [
-          {
-              "name": "_tokenAddress",
-              "type": "address",
-              "internalType": "address"
-          },
-          {
-              "name": "_to",
-              "type": "address",
-              "internalType": "address"
-          },
-          {
-              "name": "_amount",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-  },
-  {
-      "type": "function",
-      "name": "emergencyWithdrawNative",
-      "inputs": [
-          {
-              "name": "_to",
-              "type": "address",
-              "internalType": "address payable"
-          },
-          {
-              "name": "_amount",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-  },
-  {
-      "type": "function",
-      "name": "isAllowedTokenInternal",
-      "inputs": [
-          {
-              "name": "token",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "outputs": [
-          {
-              "name": "",
-              "type": "bool",
-              "internalType": "bool"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "lastAgentAumFeeCollectionTimestamp",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "protocolAumFeeRecipient",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "setAgent",
-      "inputs": [
-          {
-              "name": "_newAgent",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-  },
-  {
-      "type": "function",
-      "name": "setTargetWeights",
-      "inputs": [
-          {
-              "name": "_weights",
-              "type": "uint256[]",
-              "internalType": "uint256[]"
-          }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-  },
-  {
-      "type": "function",
-      "name": "targetWeights",
-      "inputs": [
-          {
-              "name": "token",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "outputs": [
-          {
-              "name": "",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "totalNAVInAccountingAsset",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "totalManagedAssets",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "totalNAVInUSDC",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "totalManagedAssetsInUSDC",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "triggerRebalance",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-  },
-  {
-      "type": "function",
-      "name": "totalSupply",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "withdraw",
-      "inputs": [
-          {
-              "name": "sharesToBurn",
-              "type": "uint256",
-              "internalType": "uint256"
-          },
-          {
-              "name": "receiver",
-              "type": "address",
-              "internalType": "address"
-          },
-          {
-              "name": "owner",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-  },
-  {
-      "type": "event",
-      "name": "AgentAumFeeCollected",
-      "inputs": [
-          {
-              "name": "agentFeeWallet",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          },
-          {
-              "name": "agentSharesMinted",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "protocolFeeRecipient",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          },
-          {
-              "name": "protocolSharesMinted",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "totalFeeValueInAccountingAsset",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "navAtFeeCalculation",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "totalSharesAtFeeCalculation",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "timestamp",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "wethValueInUSDC",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          }
-      ],
-      "anonymous": false
-  },
-  {
-      "type": "event",
-      "name": "AgentUpdated",
-      "inputs": [
-          {
-              "name": "oldAgent",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          },
-          {
-              "name": "newAgent",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          }
-      ],
-      "anonymous": false
-  },
-  {
-      "type": "event",
-      "name": "BasketAssetsWithdrawn",
-      "inputs": [
-          {
-              "name": "owner",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          },
-          {
-              "name": "receiver",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          },
-          {
-              "name": "sharesBurned",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "tokensWithdrawn",
-              "type": "address[]",
-              "indexed": false,
-              "internalType": "address[]"
-          },
-          {
-              "name": "amountsWithdrawn",
-              "type": "uint256[]",
-              "indexed": false,
-              "internalType": "uint256[]"
-          },
-          {
-              "name": "navBeforeWithdrawalWETH",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "totalSupplyBeforeWithdrawal",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "totalWETHValueOfWithdrawal",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "wethValueInUSDC",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          }
-      ],
-      "anonymous": false
-  },
-  {
-      "type": "event",
-      "name": "EmergencyWithdrawal",
-      "inputs": [
-          {
-              "name": "token",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          },
-          {
-              "name": "amount",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          }
-      ],
-      "anonymous": false
-  },
-  {
-      "type": "event",
-      "name": "FundTokenSwapped",
-      "inputs": [
-          {
-              "name": "tokenFrom",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          },
-          {
-              "name": "amountFrom",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "tokenTo",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          },
-          {
-              "name": "amountTo",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          }
-      ],
-      "anonymous": false
-  },
-  {
-      "type": "event",
-      "name": "RebalanceCheck",
-      "inputs": [
-          {
-              "name": "needsRebalance",
-              "type": "bool",
-              "indexed": false,
-              "internalType": "bool"
-          },
-          {
-              "name": "maxDeviationBPS",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "currentNAV_AA",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          }
-      ],
-      "anonymous": false
-  },
-  {
-      "type": "event",
-      "name": "RebalanceCycleExecuted",
-      "inputs": [
-          {
-              "name": "navBeforeRebalanceAA",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "navAfterRebalanceAA",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "blockTimestamp",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "wethValueInUSDC",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          }
-      ],
-      "anonymous": false
-  },
-  {
-      "type": "event",
-      "name": "TargetWeightsUpdated",
-      "inputs": [
-          {
-              "name": "agent",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          },
-          {
-              "name": "tokens",
-              "type": "address[]",
-              "indexed": false,
-              "internalType": "address[]"
-          },
-          {
-              "name": "weights",
-              "type": "uint256[]",
-              "indexed": false,
-              "internalType": "uint256[]"
-          },
-          {
-              "name": "timestamp",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          }
-      ],
-      "anonymous": false
-  },
-  {
-      "type": "event",
-      "name": "WETHDepositedAndSharesMinted",
-      "inputs": [
-          {
-              "name": "depositor",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          },
-          {
-              "name": "receiver",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          },
-          {
-              "name": "wethDeposited",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "sharesMinted",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "navBeforeDepositWETH",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "totalSupplyBeforeDeposit",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "wethValueInUSDC",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          }
-      ],
-      "anonymous": false
-  }
+    {
+        "type": "function",
+        "name": "ACCOUNTING_ASSET",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "AGENT_AUM_FEE_SHARE_BPS",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "DEFAULT_POOL_STABILITY",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool",
+                "internalType": "bool"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "DEFAULT_SLIPPAGE_BPS",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "PROTOCOL_AUM_FEE_SHARE_BPS",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "REBALANCE_DEVIATION_THRESHOLD_BPS",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "SWAP_DEADLINE_OFFSET",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "TOTAL_WEIGHT_BASIS_POINTS",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "USDC_ADDRESS",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "agent",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "agentAumFeeBps",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "agentAumFeeWallet",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "allowedTokens",
+        "inputs": [
+            {
+                "name": "index",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "collectAgentManagementFee",
+        "inputs": [],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "deposit",
+        "inputs": [
+            {
+                "name": "amountWETHToDeposit",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "receiver",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "sharesMinted",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "dexRouter",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "contract IAerodromeRouter"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "emergencyWithdrawERC20",
+        "inputs": [
+            {
+                "name": "_tokenAddress",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "_to",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "_amount",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "emergencyWithdrawNative",
+        "inputs": [
+            {
+                "name": "_to",
+                "type": "address",
+                "internalType": "address payable"
+            },
+            {
+                "name": "_amount",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "getCurrentCompositionBPS",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "currentComposition_",
+                "type": "uint256[]",
+                "internalType": "uint256[]"
+            },
+            {
+                "name": "tokenAddresses_",
+                "type": "address[]",
+                "internalType": "address[]"
+            },
+            {
+                "name": "tokenSymbols_",
+                "type": "string[]",
+                "internalType": "string[]"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getTargetCompositionBPS",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "targetComposition_",
+                "type": "uint256[]",
+                "internalType": "uint256[]"
+            },
+            {
+                "name": "tokenAddresses_",
+                "type": "address[]",
+                "internalType": "address[]"
+            },
+            {
+                "name": "tokenSymbols_",
+                "type": "string[]",
+                "internalType": "string[]"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "isAllowedTokenInternal",
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool",
+                "internalType": "bool"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "lastAgentAumFeeCollectionTimestamp",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "protocolAumFeeRecipient",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "setAgent",
+        "inputs": [
+            {
+                "name": "_newAgent",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "setTargetWeights",
+        "inputs": [
+            {
+                "name": "_weights",
+                "type": "uint256[]",
+                "internalType": "uint256[]"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "setTargetWeightsAndRebalanceIfNeeded",
+        "inputs": [
+            {
+                "name": "_weights",
+                "type": "uint256[]",
+                "internalType": "uint256[]"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "targetWeights",
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "totalNAVInAccountingAsset",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "totalManagedAssets",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "totalNAVInUSDC",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "totalManagedAssetsInUSDC",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "triggerRebalance",
+        "inputs": [],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "withdraw",
+        "inputs": [
+            {
+                "name": "sharesToBurn",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "receiver",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "owner",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "event",
+        "name": "AgentAumFeeCollected",
+        "inputs": [
+            {
+                "name": "agentFeeWallet",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "agentSharesMinted",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "protocolFeeRecipient",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "protocolSharesMinted",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "totalFeeValueInAccountingAsset",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "navAtFeeCalculation",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "totalSharesAtFeeCalculation",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "timestamp",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "AgentUpdated",
+        "inputs": [
+            {
+                "name": "oldAgent",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "newAgent",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "BasketAssetsWithdrawn",
+        "inputs": [
+            {
+                "name": "owner",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "receiver",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "sharesBurned",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "tokensWithdrawn",
+                "type": "address[]",
+                "indexed": false,
+                "internalType": "address[]"
+            },
+            {
+                "name": "amountsWithdrawn",
+                "type": "uint256[]",
+                "indexed": false,
+                "internalType": "uint256[]"
+            },
+            {
+                "name": "navBeforeWithdrawalWETH",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "totalSupplyBeforeWithdrawal",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "totalWETHValueOfWithdrawal",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "wethValueInUSDC",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "EmergencyWithdrawal",
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "amount",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "FundTokenSwapped",
+        "inputs": [
+            {
+                "name": "tokenFrom",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "amountFrom",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "tokenTo",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "amountTo",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "RebalanceCheck",
+        "inputs": [
+            {
+                "name": "needsRebalance",
+                "type": "bool",
+                "indexed": false,
+                "internalType": "bool"
+            },
+            {
+                "name": "maxDeviationBPS",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "currentNAV_AA",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "RebalanceCycleExecuted",
+        "inputs": [
+            {
+                "name": "navBeforeRebalanceAA",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "navAfterRebalanceAA",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "blockTimestamp",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "wethValueInUSDC",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "TargetWeightsUpdated",
+        "inputs": [
+            {
+                "name": "agent",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "tokens",
+                "type": "address[]",
+                "indexed": false,
+                "internalType": "address[]"
+            },
+            {
+                "name": "weights",
+                "type": "uint256[]",
+                "indexed": false,
+                "internalType": "uint256[]"
+            },
+            {
+                "name": "timestamp",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "WETHDepositedAndSharesMinted",
+        "inputs": [
+            {
+                "name": "depositor",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "receiver",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "wethDeposited",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "sharesMinted",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "navBeforeDepositWETH",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "totalSupplyBeforeDeposit",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "wethValueInUSDC",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    }
 ]

@@ -36,6 +36,7 @@ type Fund @entity(immutable: false) {
   agent: Bytes! # Current agent managing the fund
   name: String! # ERC20 name
   symbol: String! # ERC20 symbol
+  vaultURI: String! # Vault URI/metadata
   
   # Fund configuration
   agentAumFeeWallet: Bytes!

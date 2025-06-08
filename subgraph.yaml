@@ -6,9 +6,9 @@ dataSources:
     name: WhackRockFundRegistry
     network: base
     source:
-      address: "0x0B606A3B7ed0dFD34aE60263F0AE221d5C7de75B" # Replace with actual registry address
+      address: "0xDa03e2528F51DB9aE1070D86bEba1134C3B1481a" # Replace with actual registry address
       abi: WhackRockFundRegistry
-      startBlock: 30833756 # Replace with actual deployment block
+      startBlock: 31178878 # Replace with actual deployment block
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -25,8 +25,10 @@ dataSources:
           file: ./abis/WhackRockFundRegistry.json
         - name: WhackRockFund
           file: ./abis/WhackRockFund.json
+        - name: IERC20
+          file: ./abis/IERC20.json
       eventHandlers:
-        - event: WhackRockFundCreated(indexed uint256,indexed address,indexed address,address,string,string,address[],uint256[],address,uint256,uint256)
+        - event: WhackRockFundCreated(indexed uint256,indexed address,indexed address,address,string,string,string,address[],uint256[],address,uint256,uint256)
           handler: handleWhackRockFundCreated
         - event: RegistryAllowedTokenAdded(indexed address)
           handler: handleRegistryAllowedTokenAdded
@@ -61,6 +63,8 @@ templates:
       abis:
         - name: WhackRockFund
           file: ./abis/WhackRockFund.json
+        - name: IERC20
+          file: ./abis/IERC20.json
       eventHandlers:
         - event: AgentUpdated(indexed address,indexed address)
           handler: handleAgentUpdated
@@ -70,7 +74,7 @@ templates:
           handler: handleWETHDepositedAndSharesMinted
         - event: BasketAssetsWithdrawn(indexed address,indexed address,uint256,address[],uint256[],uint256,uint256,uint256,uint256)
           handler: handleBasketAssetsWithdrawn
-        - event: AgentAumFeeCollected(indexed address,uint256,indexed address,uint256,uint256,uint256,uint256,uint256,uint256)
+        - event: AgentAumFeeCollected(indexed address,uint256,indexed address,uint256,uint256,uint256,uint256,uint256)
           handler: handleAgentAumFeeCollected
         - event: RebalanceCycleExecuted(uint256,uint256,uint256,uint256)
           handler: handleRebalanceCycleExecuted

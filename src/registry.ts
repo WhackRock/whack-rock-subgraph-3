@@ -7,6 +7,7 @@ import {
 } from "../generated/WhackRockFundRegistry/WhackRockFundRegistry";
 import { WhackRockFund as FundTemplate } from "../generated/templates";
 import { WhackRockFund as FundContract } from "../generated/templates/WhackRockFund/WhackRockFund";
+import { IERC20 } from "../generated/WhackRockFundRegistry/IERC20";
 import {
   Registry,
   Fund,
@@ -41,6 +42,7 @@ export function handleWhackRockFundCreated(event: WhackRockFundCreated): void {
   fund.agent = event.params.initialAgent;
   fund.name = event.params.vaultName;
   fund.symbol = event.params.vaultSymbol;
+  fund.vaultURI = event.params.vaultURI;
   fund.agentAumFeeWallet = event.params.agentAumFeeWallet;
   fund.agentAumFeeBps = event.params.agentTotalAumFeeBps;
   fund.currentNAVInUSDC = BigInt.fromI32(0);
@@ -208,7 +210,10 @@ export function handleHourlyNAVUpdate(block: ethereum.Block): void {
     
     // Get NAV in USDC
     let navResult = fundContract.try_totalNAVInUSDC();
-    let totalSupplyResult = fundContract.try_totalSupply();
+    
+    // Get total supply using IERC20 interface since WhackRockFund inherits from ERC20
+    let erc20Contract = IERC20.bind(fundAddress);
+    let totalSupplyResult = erc20Contract.try_totalSupply();
     
     if (navResult.reverted || totalSupplyResult.reverted) continue;
     
