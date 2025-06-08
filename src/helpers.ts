@@ -15,10 +15,14 @@ export function roundToHour(timestamp: BigInt): BigInt {
 
 /**
  * Helper function to calculate NAV per share
+ * navInUSDC has 6 decimals, totalSupply has 18 decimals
+ * To get the correct USD price per share, we need to scale by 1e12
  */
 export function calculateNavPerShare(navInUSDC: BigInt, totalSupply: BigInt): BigDecimal {
   if (totalSupply.gt(BigInt.fromI32(0))) {
-    return navInUSDC.toBigDecimal().div(totalSupply.toBigDecimal());
+    // Scale navInUSDC by 1e12 to account for decimal difference (18 - 6 = 12)
+    let scaledNavInUSDC = navInUSDC.times(BigInt.fromString("1000000000000")); // 1e12
+    return scaledNavInUSDC.toBigDecimal().div(totalSupply.toBigDecimal());
   }
   return BigDecimal.fromString("0");
 } 
