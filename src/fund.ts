@@ -6,6 +6,7 @@ import {
   BasketAssetsWithdrawn,
   AgentAumFeeCollected,
   RebalanceCycleExecuted,
+  OwnershipTransferred,
   WhackRockFund as FundContract
 } from "../generated/templates/WhackRockFund/WhackRockFund";
 import { IERC20 } from "../generated/templates/WhackRockFund/IERC20";
@@ -383,4 +384,14 @@ export function handleRebalanceCycleExecuted(event: RebalanceCycleExecuted): voi
     event.transaction.hash,
     event.params.wethValueInUSDC
   );
+}
+
+export function handleOwnershipTransferred(event: OwnershipTransferred): void {
+  let fund = Fund.load(event.address.toHexString());
+  if (fund == null) return;
+
+  // Update fund creator to new owner
+  fund.creator = event.params.newOwner;
+  fund.updatedAt = event.block.timestamp;
+  fund.save();
 } 

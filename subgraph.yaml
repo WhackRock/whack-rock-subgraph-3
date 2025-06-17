@@ -78,4 +78,6 @@ templates:
           handler: handleAgentAumFeeCollected
         - event: RebalanceCycleExecuted(uint256,uint256,uint256,uint256)
           handler: handleRebalanceCycleExecuted
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
       file: ./src/fund.ts 

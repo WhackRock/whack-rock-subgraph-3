@@ -11,26 +11,12 @@ type Registry @entity(immutable: false) {
 }
 
 """
-Token metadata entity to store ERC20 token information
-"""
-type Token @entity(immutable: false) {
-  id: ID! # Token contract address
-  address: Bytes! # Token contract address
-  name: String! # ERC20 name
-  symbol: String! # ERC20 symbol
-  decimals: BigInt! # ERC20 decimals
-  # Derived relationships
-  allowedTokens: [AllowedToken!]! @derivedFrom(field: "token")
-  fundTokens: [FundToken!]! @derivedFrom(field: "token")
-}
-
-"""
 Tokens allowed in the registry's global allowlist
 """
 type AllowedToken @entity(immutable: false) {
   id: ID! # Registry address + token address
   registry: Registry!
-  token: Token! # Reference to Token entity
+  token: Bytes! # Token address
   isActive: Boolean! # True if currently allowed, false if removed
   addedAt: BigInt!
   removedAt: BigInt
@@ -83,7 +69,7 @@ Tokens allowed in individual funds with their target weights
 type FundToken @entity(immutable: false) {
   id: ID! # Fund address + token address
   fund: Fund!
-  token: Token! # Reference to Token entity
+  token: Bytes! # Token address
   targetWeight: BigInt! # Target weight in basis points (0-10000)
   isActive: Boolean! # True if currently part of the fund
   addedAt: BigInt!

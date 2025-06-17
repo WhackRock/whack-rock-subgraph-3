@@ -22,11 +22,11 @@ dataSources:
         - GlobalStats
       abis:
         - name: WhackRockFundRegistry
-          file: WhackRockFundRegistry\WhackRockFundRegistry.json
+          file: WhackRockFundRegistry/WhackRockFundRegistry.json
         - name: WhackRockFund
-          file: WhackRockFundRegistry\WhackRockFund.json
+          file: WhackRockFundRegistry/WhackRockFund.json
         - name: IERC20
-          file: WhackRockFundRegistry\IERC20.json
+          file: WhackRockFundRegistry/IERC20.json
       eventHandlers:
         - event: WhackRockFundCreated(indexed uint256,indexed address,indexed
             address,address,string,string,string,address[],uint256[],address,uint256,uint256)
@@ -40,7 +40,7 @@ dataSources:
           filter:
             kind: polling
             every: 300
-      file: WhackRockFundRegistry\WhackRockFundRegistry.wasm
+      file: WhackRockFundRegistry/WhackRockFundRegistry.wasm
 templates:
   - kind: ethereum/contract
     name: WhackRockFund
@@ -63,9 +63,9 @@ templates:
         - RebalanceCycle
       abis:
         - name: WhackRockFund
-          file: WhackRockFund\WhackRockFund.json
+          file: WhackRockFund/WhackRockFund.json
         - name: IERC20
-          file: WhackRockFund\IERC20.json
+          file: WhackRockFund/IERC20.json
       eventHandlers:
         - event: AgentUpdated(indexed address,indexed address)
           handler: handleAgentUpdated
@@ -82,4 +82,6 @@ templates:
           handler: handleAgentAumFeeCollected
         - event: RebalanceCycleExecuted(uint256,uint256,uint256,uint256)
           handler: handleRebalanceCycleExecuted
-      file: templates\WhackRockFund\WhackRockFund.wasm
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+      file: templates/WhackRockFund/WhackRockFund.wasm
