@@ -39,6 +39,9 @@ function createNAVSnapshot(
   let fund = Fund.load(fundAddress.toHexString());
   if (fund == null) return;
 
+  // Store the old NAV before updating
+  let oldNAV = fund.currentNAVInUSDC;
+
   // Get current NAV from contract
   let fundContract = FundContract.bind(fundAddress);
   let navInUSDCResult = fundContract.try_totalNAVInUSDC();
@@ -91,13 +94,14 @@ function createNAVSnapshot(
   snapshot.save();
 
   // Update global stats
-  updateGlobalTVL();
+  updateGlobalTVL(timestamp, fundAddress, navInUSDC, oldNAV);
 }
 
 /**
- * Helper function to update global TVL
+ * Helper function to update global TVL by tracking the delta change
+ * This maintains a running total instead of recalculating from all funds
  */
-function updateGlobalTVL(): void {
+function updateGlobalTVL(timestamp: BigInt, fundAddress: Address, newNAV: BigInt, oldNAV: BigInt): void {
   let globalStats = GlobalStats.load("1");
   if (globalStats == null) {
     globalStats = new GlobalStats("1");
@@ -106,9 +110,11 @@ function updateGlobalTVL(): void {
     globalStats.totalValueLockedUSDC = BigInt.fromI32(0);
   }
 
-  // Note: For a more accurate TVL, we would need to query all funds
-  // For now, we'll update this when we have individual fund updates
-  globalStats.lastUpdated = BigInt.fromI32(0); // Will be set by caller
+  // Update TVL by the difference between new and old NAV
+  let navDelta = newNAV.minus(oldNAV);
+  globalStats.totalValueLockedUSDC = globalStats.totalValueLockedUSDC.plus(navDelta);
+  
+  globalStats.lastUpdated = timestamp;
   globalStats.save();
 }
 
