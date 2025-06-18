@@ -32,11 +32,13 @@ type Fund @entity(immutable: false) {
   registry: Registry!
   fundId: BigInt! # Sequential ID from registry
   address: Bytes! # Fund contract address
-  creator: Bytes! # Address that created the fund
+  creator: Bytes! # Address that originally created the fund (never changes)
+  owner: Bytes! # Current owner of the fund (can change via ownership transfer)
   agent: Bytes! # Current agent managing the fund
   name: String! # ERC20 name
   symbol: String! # ERC20 symbol
   vaultURI: String! # Vault URI/metadata
+  description: String! # Fund description
   
   # Fund configuration
   agentAumFeeWallet: Bytes!

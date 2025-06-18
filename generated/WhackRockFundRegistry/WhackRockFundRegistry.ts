@@ -143,24 +143,28 @@ export class WhackRockFundCreated__Params {
     return this._event.parameters[6].value.toString();
   }
 
+  get description(): string {
+    return this._event.parameters[7].value.toString();
+  }
+
   get allowedTokens(): Array<Address> {
-    return this._event.parameters[7].value.toAddressArray();
+    return this._event.parameters[8].value.toAddressArray();
   }
 
   get targetWeights(): Array<BigInt> {
-    return this._event.parameters[8].value.toBigIntArray();
+    return this._event.parameters[9].value.toBigIntArray();
   }
 
   get agentAumFeeWallet(): Address {
-    return this._event.parameters[9].value.toAddress();
+    return this._event.parameters[10].value.toAddress();
   }
 
   get agentTotalAumFeeBps(): BigInt {
-    return this._event.parameters[10].value.toBigInt();
+    return this._event.parameters[11].value.toBigInt();
   }
 
   get timestamp(): BigInt {
-    return this._event.parameters[11].value.toBigInt();
+    return this._event.parameters[12].value.toBigInt();
   }
 }
 
@@ -176,12 +180,13 @@ export class WhackRockFundRegistry extends ethereum.SmartContract {
     _vaultName: string,
     _vaultSymbol: string,
     _vaultURI: string,
+    _description: string,
     _agentAumFeeWalletForFund: Address,
     _agentSetTotalAumFeeBps: BigInt,
   ): Address {
     let result = super.call(
       "createWhackRockFund",
-      "createWhackRockFund(address,address[],uint256[],string,string,string,address,uint256):(address)",
+      "createWhackRockFund(address,address[],uint256[],string,string,string,string,address,uint256):(address)",
       [
         ethereum.Value.fromAddress(_initialAgent),
         ethereum.Value.fromAddressArray(_fundAllowedTokens),
@@ -189,6 +194,7 @@ export class WhackRockFundRegistry extends ethereum.SmartContract {
         ethereum.Value.fromString(_vaultName),
         ethereum.Value.fromString(_vaultSymbol),
         ethereum.Value.fromString(_vaultURI),
+        ethereum.Value.fromString(_description),
         ethereum.Value.fromAddress(_agentAumFeeWalletForFund),
         ethereum.Value.fromUnsignedBigInt(_agentSetTotalAumFeeBps),
       ],
@@ -204,12 +210,13 @@ export class WhackRockFundRegistry extends ethereum.SmartContract {
     _vaultName: string,
     _vaultSymbol: string,
     _vaultURI: string,
+    _description: string,
     _agentAumFeeWalletForFund: Address,
     _agentSetTotalAumFeeBps: BigInt,
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "createWhackRockFund",
-      "createWhackRockFund(address,address[],uint256[],string,string,string,address,uint256):(address)",
+      "createWhackRockFund(address,address[],uint256[],string,string,string,string,address,uint256):(address)",
       [
         ethereum.Value.fromAddress(_initialAgent),
         ethereum.Value.fromAddressArray(_fundAllowedTokens),
@@ -217,6 +224,7 @@ export class WhackRockFundRegistry extends ethereum.SmartContract {
         ethereum.Value.fromString(_vaultName),
         ethereum.Value.fromString(_vaultSymbol),
         ethereum.Value.fromString(_vaultURI),
+        ethereum.Value.fromString(_description),
         ethereum.Value.fromAddress(_agentAumFeeWalletForFund),
         ethereum.Value.fromUnsignedBigInt(_agentSetTotalAumFeeBps),
       ],
@@ -399,12 +407,16 @@ export class CreateWhackRockFundCall__Inputs {
     return this._call.inputValues[5].value.toString();
   }
 
+  get _description(): string {
+    return this._call.inputValues[6].value.toString();
+  }
+
   get _agentAumFeeWalletForFund(): Address {
-    return this._call.inputValues[6].value.toAddress();
+    return this._call.inputValues[7].value.toAddress();
   }
 
   get _agentSetTotalAumFeeBps(): BigInt {
-    return this._call.inputValues[7].value.toBigInt();
+    return this._call.inputValues[8].value.toBigInt();
   }
 }
 

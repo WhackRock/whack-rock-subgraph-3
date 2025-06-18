@@ -335,6 +335,19 @@ export class Fund extends Entity {
     this.set("creator", Value.fromBytes(value));
   }
 
+  get owner(): Bytes {
+    let value = this.get("owner");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set owner(value: Bytes) {
+    this.set("owner", Value.fromBytes(value));
+  }
+
   get agent(): Bytes {
     let value = this.get("agent");
     if (!value || value.kind == ValueKind.NULL) {
@@ -385,6 +398,19 @@ export class Fund extends Entity {
 
   set vaultURI(value: string) {
     this.set("vaultURI", Value.fromString(value));
+  }
+
+  get description(): string {
+    let value = this.get("description");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set description(value: string) {
+    this.set("description", Value.fromString(value));
   }
 
   get agentAumFeeWallet(): Bytes {

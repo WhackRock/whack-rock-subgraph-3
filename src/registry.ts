@@ -38,11 +38,13 @@ export function handleWhackRockFundCreated(event: WhackRockFundCreated): void {
   fund.registry = registry.id;
   fund.fundId = event.params.fundId;
   fund.address = event.params.fundAddress;
-  fund.creator = event.params.creator;
+  fund.creator = event.params.creator; // Original creator (never changes)
+  fund.owner = event.params.creator; // Current owner (initially the creator)
   fund.agent = event.params.initialAgent;
   fund.name = event.params.vaultName;
   fund.symbol = event.params.vaultSymbol;
   fund.vaultURI = event.params.vaultURI;
+  fund.description = event.params.description;
   fund.agentAumFeeWallet = event.params.agentAumFeeWallet;
   fund.agentAumFeeBps = event.params.agentTotalAumFeeBps;
   fund.currentNAVInUSDC = BigInt.fromI32(0);

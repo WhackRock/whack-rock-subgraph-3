@@ -1,314 +1,325 @@
 [
-  {
-      "type": "function",
-      "name": "addRegistryAllowedToken",
-      "inputs": [
-          {
-              "name": "_token",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-  },
-  {
-      "type": "function",
-      "name": "batchAddRegistryAllowedToken",
-      "inputs": [
-          {
-              "name": "_tokens",
-              "type": "address[]",
-              "internalType": "address[]"
-          }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-  },
-  {
-      "type": "function",
-      "name": "createWhackRockFund",
-      "inputs": [
-          {
-              "name": "_initialAgent",
-              "type": "address",
-              "internalType": "address"
-          },
-          {
-              "name": "_fundAllowedTokens",
-              "type": "address[]",
-              "internalType": "address[]"
-          },
-          {
-              "name": "_initialTargetWeights",
-              "type": "uint256[]",
-              "internalType": "uint256[]"
-          },
-          {
-              "name": "_vaultName",
-              "type": "string",
-              "internalType": "string"
-          },
-          {
-              "name": "_vaultSymbol",
-              "type": "string",
-              "internalType": "string"
-          },
-          {
-              "name": "_vaultURI",
-              "type": "string",
-              "internalType": "string"
-          },
-          {
-              "name": "_agentAumFeeWalletForFund",
-              "type": "address",
-              "internalType": "address"
-          },
-          {
-              "name": "_agentSetTotalAumFeeBps",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "outputs": [
-          {
-              "name": "fundAddress",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "stateMutability": "nonpayable"
-  },
-  {
-      "type": "function",
-      "name": "getDeployedFundsCount",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "getFundAddressByIndex",
-      "inputs": [
-          {
-              "name": "_index",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "outputs": [
-          {
-              "name": "",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "getRegistryAllowedTokens",
-      "inputs": [],
-      "outputs": [
-          {
-              "name": "",
-              "type": "address[]",
-              "internalType": "address[]"
-          }
-      ],
-      "stateMutability": "view"
-  },
-  {
-      "type": "function",
-      "name": "removeRegistryAllowedToken",
-      "inputs": [
-          {
-              "name": "_token",
-              "type": "address",
-              "internalType": "address"
-          }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-  },
-  {
-      "type": "function",
-      "name": "setMaxInitialAllowedTokensLength",
-      "inputs": [
-          {
-              "name": "_newMaxLength",
-              "type": "uint256",
-              "internalType": "uint256"
-          }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-  },
-  {
-      "type": "event",
-      "name": "MaxInitialAllowedTokensLengthUpdated",
-      "inputs": [
-          {
-              "name": "newLength",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          }
-      ],
-      "anonymous": false
-  },
-  {
-      "type": "event",
-      "name": "RegistryAllowedTokenAdded",
-      "inputs": [
-          {
-              "name": "token",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          }
-      ],
-      "anonymous": false
-  },
-  {
-      "type": "event",
-      "name": "RegistryAllowedTokenRemoved",
-      "inputs": [
-          {
-              "name": "token",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          }
-      ],
-      "anonymous": false
-  },
-  {
-      "type": "event",
-      "name": "RegistryParamsUpdated",
-      "inputs": [
-          {
-              "name": "usdcTokenAddress",
-              "type": "address",
-              "indexed": false,
-              "internalType": "address"
-          },
-          {
-              "name": "whackRockRewardsAddr",
-              "type": "address",
-              "indexed": false,
-              "internalType": "address"
-          },
-          {
-              "name": "protocolCreationFeeUsdc",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "totalAumFeeBps",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "protocolAumRecipient",
-              "type": "address",
-              "indexed": false,
-              "internalType": "address"
-          },
-          {
-              "name": "maxAgentDepositFeeBpsAllowed",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          }
-      ],
-      "anonymous": false
-  },
-  {
-      "type": "event",
-      "name": "WhackRockFundCreated",
-      "inputs": [
-          {
-              "name": "fundId",
-              "type": "uint256",
-              "indexed": true,
-              "internalType": "uint256"
-          },
-          {
-              "name": "fundAddress",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          },
-          {
-              "name": "creator",
-              "type": "address",
-              "indexed": true,
-              "internalType": "address"
-          },
-          {
-              "name": "initialAgent",
-              "type": "address",
-              "indexed": false,
-              "internalType": "address"
-          },
-          {
-              "name": "vaultName",
-              "type": "string",
-              "indexed": false,
-              "internalType": "string"
-          },
-          {
-              "name": "vaultSymbol",
-              "type": "string",
-              "indexed": false,
-              "internalType": "string"
-          },
-          {
-              "name": "vaultURI",
-              "type": "string",
-              "indexed": false,
-              "internalType": "string"
-          },
-          {
-              "name": "allowedTokens",
-              "type": "address[]",
-              "indexed": false,
-              "internalType": "address[]"
-          },
-          {
-              "name": "targetWeights",
-              "type": "uint256[]",
-              "indexed": false,
-              "internalType": "uint256[]"
-          },
-          {
-              "name": "agentAumFeeWallet",
-              "type": "address",
-              "indexed": false,
-              "internalType": "address"
-          },
-          {
-              "name": "agentTotalAumFeeBps",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          },
-          {
-              "name": "timestamp",
-              "type": "uint256",
-              "indexed": false,
-              "internalType": "uint256"
-          }
-      ],
-      "anonymous": false
-  }
-]
+        {
+            "type": "function",
+            "name": "addRegistryAllowedToken",
+            "inputs": [
+                {
+                    "name": "_token",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "function",
+            "name": "batchAddRegistryAllowedToken",
+            "inputs": [
+                {
+                    "name": "_tokens",
+                    "type": "address[]",
+                    "internalType": "address[]"
+                }
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "function",
+            "name": "createWhackRockFund",
+            "inputs": [
+                {
+                    "name": "_initialAgent",
+                    "type": "address",
+                    "internalType": "address"
+                },
+                {
+                    "name": "_fundAllowedTokens",
+                    "type": "address[]",
+                    "internalType": "address[]"
+                },
+                {
+                    "name": "_initialTargetWeights",
+                    "type": "uint256[]",
+                    "internalType": "uint256[]"
+                },
+                {
+                    "name": "_vaultName",
+                    "type": "string",
+                    "internalType": "string"
+                },
+                {
+                    "name": "_vaultSymbol",
+                    "type": "string",
+                    "internalType": "string"
+                },
+                {
+                    "name": "_vaultURI",
+                    "type": "string",
+                    "internalType": "string"
+                },
+                {
+                    "name": "_description",
+                    "type": "string",
+                    "internalType": "string"
+                },
+                {
+                    "name": "_agentAumFeeWalletForFund",
+                    "type": "address",
+                    "internalType": "address"
+                },
+                {
+                    "name": "_agentSetTotalAumFeeBps",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "fundAddress",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "function",
+            "name": "getDeployedFundsCount",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "getFundAddressByIndex",
+            "inputs": [
+                {
+                    "name": "_index",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "getRegistryAllowedTokens",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address[]",
+                    "internalType": "address[]"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "removeRegistryAllowedToken",
+            "inputs": [
+                {
+                    "name": "_token",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "function",
+            "name": "setMaxInitialAllowedTokensLength",
+            "inputs": [
+                {
+                    "name": "_newMaxLength",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "outputs": [],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "event",
+            "name": "MaxInitialAllowedTokensLengthUpdated",
+            "inputs": [
+                {
+                    "name": "newLength",
+                    "type": "uint256",
+                    "indexed": false,
+                    "internalType": "uint256"
+                }
+            ],
+            "anonymous": false
+        },
+        {
+            "type": "event",
+            "name": "RegistryAllowedTokenAdded",
+            "inputs": [
+                {
+                    "name": "token",
+                    "type": "address",
+                    "indexed": true,
+                    "internalType": "address"
+                }
+            ],
+            "anonymous": false
+        },
+        {
+            "type": "event",
+            "name": "RegistryAllowedTokenRemoved",
+            "inputs": [
+                {
+                    "name": "token",
+                    "type": "address",
+                    "indexed": true,
+                    "internalType": "address"
+                }
+            ],
+            "anonymous": false
+        },
+        {
+            "type": "event",
+            "name": "RegistryParamsUpdated",
+            "inputs": [
+                {
+                    "name": "usdcTokenAddress",
+                    "type": "address",
+                    "indexed": false,
+                    "internalType": "address"
+                },
+                {
+                    "name": "whackRockRewardsAddr",
+                    "type": "address",
+                    "indexed": false,
+                    "internalType": "address"
+                },
+                {
+                    "name": "protocolCreationFeeUsdc",
+                    "type": "uint256",
+                    "indexed": false,
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "totalAumFeeBps",
+                    "type": "uint256",
+                    "indexed": false,
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "protocolAumRecipient",
+                    "type": "address",
+                    "indexed": false,
+                    "internalType": "address"
+                },
+                {
+                    "name": "maxAgentDepositFeeBpsAllowed",
+                    "type": "uint256",
+                    "indexed": false,
+                    "internalType": "uint256"
+                }
+            ],
+            "anonymous": false
+        },
+        {
+            "type": "event",
+            "name": "WhackRockFundCreated",
+            "inputs": [
+                {
+                    "name": "fundId",
+                    "type": "uint256",
+                    "indexed": true,
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "fundAddress",
+                    "type": "address",
+                    "indexed": true,
+                    "internalType": "address"
+                },
+                {
+                    "name": "creator",
+                    "type": "address",
+                    "indexed": true,
+                    "internalType": "address"
+                },
+                {
+                    "name": "initialAgent",
+                    "type": "address",
+                    "indexed": false,
+                    "internalType": "address"
+                },
+                {
+                    "name": "vaultName",
+                    "type": "string",
+                    "indexed": false,
+                    "internalType": "string"
+                },
+                {
+                    "name": "vaultSymbol",
+                    "type": "string",
+                    "indexed": false,
+                    "internalType": "string"
+                },
+                {
+                    "name": "vaultURI",
+                    "type": "string",
+                    "indexed": false,
+                    "internalType": "string"
+                },
+                {
+                    "name": "description",
+                    "type": "string",
+                    "indexed": false,
+                    "internalType": "string"
+                },
+                {
+                    "name": "allowedTokens",
+                    "type": "address[]",
+                    "indexed": false,
+                    "internalType": "address[]"
+                },
+                {
+                    "name": "targetWeights",
+                    "type": "uint256[]",
+                    "indexed": false,
+                    "internalType": "uint256[]"
+                },
+                {
+                    "name": "agentAumFeeWallet",
+                    "type": "address",
+                    "indexed": false,
+                    "internalType": "address"
+                },
+                {
+                    "name": "agentTotalAumFeeBps",
+                    "type": "uint256",
+                    "indexed": false,
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "timestamp",
+                    "type": "uint256",
+                    "indexed": false,
+                    "internalType": "uint256"
+                }
+            ],
+            "anonymous": false
+        }
+    ]

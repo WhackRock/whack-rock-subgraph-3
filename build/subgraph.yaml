@@ -6,7 +6,7 @@ dataSources:
     name: WhackRockFundRegistry
     network: base
     source:
-      address: "0xDa03e2528F51DB9aE1070D86bEba1134C3B1481a"
+      address: "0x0016Fe24a3a3Ed6FaC6A2D3Da0CAAd4A2187B90E"
       abi: WhackRockFundRegistry
       startBlock: 31178878
     mapping:
@@ -29,7 +29,7 @@ dataSources:
           file: WhackRockFundRegistry/IERC20.json
       eventHandlers:
         - event: WhackRockFundCreated(indexed uint256,indexed address,indexed
-            address,address,string,string,string,address[],uint256[],address,uint256,uint256)
+            address,address,string,string,string,string,address[],uint256[],address,uint256,uint256)
           handler: handleWhackRockFundCreated
         - event: RegistryAllowedTokenAdded(indexed address)
           handler: handleRegistryAllowedTokenAdded
@@ -66,6 +66,8 @@ templates:
           file: WhackRockFund/WhackRockFund.json
         - name: IERC20
           file: WhackRockFund/IERC20.json
+        - name: Ownable
+          file: WhackRockFund/Ownable.json
       eventHandlers:
         - event: AgentUpdated(indexed address,indexed address)
           handler: handleAgentUpdated

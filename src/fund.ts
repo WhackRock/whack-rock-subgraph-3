@@ -390,8 +390,8 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   let fund = Fund.load(event.address.toHexString());
   if (fund == null) return;
 
-  // Update fund creator to new owner
-  fund.creator = event.params.newOwner;
+  // Update fund owner to new owner (keep creator unchanged)
+  fund.owner = event.params.newOwner;
   fund.updatedAt = event.block.timestamp;
   fund.save();
 } 
