@@ -70,6 +70,8 @@ type FundToken @entity(immutable: false) {
   id: ID! # Fund address + token address
   fund: Fund!
   token: Bytes! # Token address
+  name: String! # Token name from ERC20
+  symbol: String! # Token symbol from ERC20
   targetWeight: BigInt! # Target weight in basis points (0-10000)
   isActive: Boolean! # True if currently part of the fund
   addedAt: BigInt!

@@ -63,6 +63,16 @@ export function handleWhackRockFundCreated(event: WhackRockFundCreated): void {
     let fundToken = new FundToken(fundTokenId);
     fundToken.fund = fund.id;
     fundToken.token = allowedTokens[i];
+    
+    // Fetch token name and symbol from ERC20 contract
+    let tokenContract = IERC20.bind(allowedTokens[i]);
+    let nameResult = tokenContract.try_name();
+    let symbolResult = tokenContract.try_symbol();
+    
+    // Set name and symbol with fallback values if calls fail
+    fundToken.name = nameResult.reverted ? "Unknown" : nameResult.value;
+    fundToken.symbol = symbolResult.reverted ? "UNKNOWN" : symbolResult.value;
+    
     fundToken.targetWeight = targetWeights[i];
     fundToken.isActive = true;
     fundToken.addedAt = event.block.timestamp;
