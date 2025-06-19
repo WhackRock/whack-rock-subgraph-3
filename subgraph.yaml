@@ -6,7 +6,7 @@ dataSources:
     name: WhackRockFundRegistry
     network: base
     source:
-      address: "0x0016Fe24a3a3Ed6FaC6A2D3Da0CAAd4A2187B90E" # Replace with actual registry address
+      address: "0xAf2c1b44A8DF5e0B187e84988fF84F699D4B83a9" # Replace with actual registry address
       abi: WhackRockFundRegistry
       startBlock: 31178878 # Replace with actual deployment block
     mapping:
