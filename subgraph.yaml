@@ -83,3 +83,49 @@ templates:
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
       file: ./src/fund.ts 
+  - kind: ethereum
+    name: WhackRockStaking
+    network: base
+    source:
+      address: "0x1327a740973dcdc82cb8166ccf84a6b1ee95cc3c"
+      abi: WhackRockStaking
+      startBlock: 32390501 # Replace with actual deployment block
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - StakingContract
+        - Stake
+        - StakeEvent
+        - PointsClaimEvent
+        - WithdrawalEvent
+        - PointsRedeemerEvent
+        - TimelockEvent
+        - PointsAccruedEvent
+        - User
+      abis:
+        - name: WhackRockStaking
+          file: ./abis/WhackRockStaking.json
+        - name: IERC20
+          file: ./abis/IERC20.json
+      eventHandlers:
+        - event: Staked(indexed address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleStaked
+        - event: PointsClaimed(indexed address,uint256,uint256)
+          handler: handlePointsClaimed
+        - event: Withdrawn(indexed address,uint256,uint256,uint256,uint256)
+          handler: handleWithdrawn
+        - event: PointsRedeemerSet(indexed address)
+          handler: handlePointsRedeemerSet
+        - event: PointsRedeemed(indexed address,indexed address,uint256)
+          handler: handlePointsRedeemed
+        - event: TimelockQueued(indexed bytes32,uint256)
+          handler: handleTimelockQueued
+        - event: TimelockExecuted(indexed bytes32)
+          handler: handleTimelockExecuted
+        - event: TimelockCancelled(indexed bytes32)
+          handler: handleTimelockCancelled
+        - event: PointsAccrued(indexed address,uint256,uint256)
+          handler: handlePointsAccrued
+      file: ./src/staking.ts

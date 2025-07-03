@@ -210,4 +210,151 @@ type RebalanceCycle @entity(immutable: true) {
   timestamp: BigInt!
   blockNumber: BigInt!
   transactionHash: Bytes!
+}
+
+"""
+WhackRock Staking Contract
+"""
+type StakingContract @entity(immutable: false) {
+  id: ID! # Contract address
+  address: Bytes! # Contract address
+  stakingToken: Bytes! # Address of the staking token
+  totalStaked: BigInt! # Total amount staked across all users
+  pointsRedeemer: Bytes # Address of the points redeemer contract
+  stakes: [Stake!]! @derivedFrom(field: "contract")
+  events: [StakeEvent!]! @derivedFrom(field: "contract")
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+"""
+Individual stake position
+"""
+type Stake @entity(immutable: false) {
+  id: ID! # Contract address + user address
+  contract: StakingContract!
+  user: User!
+  amount: BigInt! # Amount of tokens staked
+  startTime: BigInt! # When the stake was created
+  lockDuration: BigInt! # Duration of the lock period
+  unlockTime: BigInt! # When tokens can be withdrawn
+  multiplier: BigInt! # Points multiplier based on lock duration
+  accumulatedPoints: BigInt! # Points earned but not yet claimed
+  lastClaimTime: BigInt! # Last time points were calculated
+  claimedPoints: BigInt! # Total points claimed by this user
+  isActive: Boolean! # Whether the stake is still active
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+"""
+Base type for all staking events
+"""
+interface StakeEvent {
+  id: ID!
+  contract: StakingContract!
+  user: User!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+}
+
+"""
+Stake event - when user stakes tokens
+"""
+type StakeEventStaked @entity(immutable: true) implements StakeEvent {
+  id: ID! # Transaction hash + log index
+  contract: StakingContract!
+  user: User!
+  amount: BigInt! # Amount staked in this transaction
+  totalStakedAmount: BigInt! # User's total staked amount after this stake
+  lockDuration: BigInt! # Lock duration in seconds
+  unlockTime: BigInt! # When tokens can be withdrawn
+  multiplier: BigInt! # Points multiplier
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+}
+
+"""
+Points claim event
+"""
+type PointsClaimEvent @entity(immutable: true) implements StakeEvent {
+  id: ID! # Transaction hash + log index
+  contract: StakingContract!
+  user: User!
+  points: BigInt! # Amount of points claimed
+  totalClaimedPoints: BigInt! # User's total claimed points after this claim
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+}
+
+"""
+Withdrawal event
+"""
+type WithdrawalEvent @entity(immutable: true) implements StakeEvent {
+  id: ID! # Transaction hash + log index
+  contract: StakingContract!
+  user: User!
+  amount: BigInt! # Amount of tokens withdrawn
+  points: BigInt! # Points claimed during withdrawal
+  totalClaimedPoints: BigInt! # User's total claimed points after withdrawal
+  stakeDuration: BigInt! # Total duration the tokens were staked
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+}
+
+"""
+Points redeemer set event
+"""
+type PointsRedeemerEvent @entity(immutable: true) {
+  id: ID! # Transaction hash + log index
+  contract: StakingContract!
+  redeemer: Bytes! # Address of the new points redeemer
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+}
+
+"""
+Points redeemed event
+"""
+type PointsRedeemedEvent @entity(immutable: true) {
+  id: ID! # Transaction hash + log index
+  contract: StakingContract!
+  user: User!
+  redeemer: Bytes! # Address of the redeemer contract
+  amount: BigInt! # Amount of points redeemed
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+}
+
+"""
+Timelock event
+"""
+type TimelockEvent @entity(immutable: true) {
+  id: ID! # Transaction hash + log index
+  contract: StakingContract!
+  functionId: Bytes! # Function identifier
+  executeTime: BigInt # When the function can be executed (null for executed/cancelled)
+  eventType: String! # "queued", "executed", or "cancelled"
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+}
+
+"""
+Points accrued event
+"""
+type PointsAccruedEvent @entity(immutable: true) implements StakeEvent {
+  id: ID! # Transaction hash + log index
+  contract: StakingContract!
+  user: User!
+  points: BigInt! # Amount of points accrued
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
 } 
