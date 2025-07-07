@@ -87,7 +87,7 @@ templates:
     name: WhackRockStaking
     network: base
     source:
-      address: "0x1327a740973dcdc82cb8166ccf84a6b1ee95cc3c"
+      address: "0x0D6975CB9f6E8EAD3Bc31967B126656CD6Bd5132"
       abi: WhackRockStaking
       startBlock: 32390501 # Replace with actual deployment block
     mapping:

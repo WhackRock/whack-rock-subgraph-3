@@ -116,9 +116,11 @@ export function handleStaked(event: Staked): void {
   stake.multiplier = event.params.multiplier;
   stake.isActive = true;
   
-  if (stake.startTime.equals(BigInt.fromI32(0))) {
-    stake.startTime = event.block.timestamp;
-    stake.lastClaimTime = event.block.timestamp;
+  // Always update start time and last claim time when staking (restaking resets these)
+  stake.startTime = event.block.timestamp;
+  stake.lastClaimTime = event.block.timestamp;
+  
+  if (stake.createdAt.equals(BigInt.fromI32(0))) {
     stake.createdAt = event.block.timestamp;
   }
   stake.updatedAt = event.block.timestamp;
